@@ -15,17 +15,22 @@
 #'   hipchat_send('room', 'My room', 'notification',
 #'     color = 'green', message = 'Everything looks <b>green</b>',
 #'     notify = FALSE, message_format = 'html')
-#'   # posts to http://
-#hipchat_message('Room name or email', "I'm in a hipchat!")
-#hipchat_topic('Room name', "This is the new topic")
-#hipchat_create_room('Room name')
-#hipchat_delete_room('Room name') # Will prompt a confirmation
-#hipchat_history('Room name')
-#hipchat_list_rooms('Group name')
-#hichat_create_user(...)
-#hipchat_update_user(...)
-#hipchat_delete_user('terrible@employee.com')
-#hipchat_list_users()
+#'   # posts to https://api.hipchat.com/v2/room/My room/notification
+#'
+#'   hipchat_send('room', 'My room', 'share', 'link',
+#'      message = 'This looks like a cool package',
+#'      link = 'http://github.com/robertzk/hipchat')
+#'   # posts to https://api.hipchat.com/v2/room/My room/share/link
+#'   # and shares a link with the room.
+#'
+#'   hipchat_send('user', 'your@@friend.org', 'message')
+#'      message = "Hey buddy what's going on?", notify = TRUE,
+#'      message_format = 'text')
+#'   # posts to https://api.hipchat.com/v2/user/your@@friend.org/message
+#'
+#'   hipchat_send('room', 'My room', 'invite', 'your@@friend.org',
+#'      reason = "Come join this room mang")
+#'   # posts to https://api.hipchat.com/v2/room/My room/invite/your@@friend.org
 #' }
 hipchat_send <- function(type, var, ..., api_token = hipchat_api_token()) {
   # TODO: (RK) Implement this.

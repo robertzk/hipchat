@@ -29,7 +29,22 @@ Send a message to the hipchat API v2.
   hipchat_send('room', 'My room', 'notification',
     color = 'green', message = 'Everything looks <b>green</b>',
     notify = FALSE, message_format = 'html')
-  # posts to http://
+  # posts to https://api.hipchat.com/v2/room/My room/notification
+
+  hipchat_send('room', 'My room', 'share', 'link',
+     message = 'This looks like a cool package',
+     link = 'http://github.com/robertzk/hipchat')
+  # posts to https://api.hipchat.com/v2/room/My room/share/link
+  # and shares a link with the room.
+
+  hipchat_send('user', 'your@friend.org', 'message')
+     message = "Hey buddy what's going on?", notify = TRUE,
+     message_format = 'text')
+  # posts to https://api.hipchat.com/v2/user/your@friend.org/message
+
+  hipchat_send('room', 'My room', 'invite', 'your@friend.org',
+     reason = "Come join this room mang")
+  # posts to https://api.hipchat.com/v2/room/My room/invite/your@friend.org
 }
 }
 \references{
