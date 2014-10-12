@@ -7,6 +7,17 @@
 hipchat_api_token <- function()
   getOption('hipchat.api_token') %||% Sys.getenv('HIPCHAT_API_TOKEN')
 
+
+#' Find appropriate HTTP method for a given Hipchat URL.
+#'
+#' @param url character. The URL to analyze.
+#' @return \code{"GET"} or \code{"POST"}. If no appropriate method is found, \code{NULL}.
+match_method <- function(url) {
+  url <- gsub(fixed = TRUE, paste0(hipchat_api_url, '/'), '', url)
+  url <- strsplit(url, '?', fixed = TRUE)[[1]]
+
+}
+
 # A temporary workaround until hadley fixes httr
 # https://github.com/hadley/httr/issues/159
 httr_with_json <- function(expr) {

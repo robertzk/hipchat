@@ -3,8 +3,6 @@
 # method of fetching the room ID for a given room name, and caching
 # this if possible.
 
-room_cache <- list()
-
 #' Convert a Hipchat room name to an ID.
 #' 
 #' This function will call the \code{/v2/room} API route if necessary to 
@@ -22,5 +20,31 @@ room_cache <- list()
 #'   to fetch the room-id map.
 #' @export
 hipchat_room_id <- function(room_name) {
+  stopifnot(is.character(room_name))
+
+  room_in_cache <- function(room_name) is.element(room_name, names(room_cache))
+  if (any(!room_in_cache(room_name))) refresh_room_cache()
 }
+
+refresh_room_cache <- function() {
+  # room_cache$set(hipchat_send('rooms'))
+}
+
+room_cache <- local({
+  .cache <- list()
+  structure(list(
+    get = function(key = NULL) {
+      if (missing(key)) .cache
+      else .cache[[key]]
+    },
+    getNames = function() names(.cache),
+    set = function(value, key = NULL) {
+      if (missing(key)) .cache <<- value
+      else .cache[[key]] <<- value
+    }
+  ), class = 'room_cache')
+})
+
+
+
 

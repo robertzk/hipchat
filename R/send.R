@@ -9,6 +9,9 @@
 #'    will be passed in to the URL; named arguments will be assumed to be
 #'    API parameters. See the examples section.
 #' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
+#' @param method character. HTTP method. Either \code{"GET"} or \code{"POST"}.
+#'    By default, the API url will be inspected and matched with the appropriate
+#'    method. Otherwise, \code{"POST"} will be used.
 #' @references https://www.hipchat.com/docs/apiv2
 #' @return the JSON output response from the Hipchat API.
 #' @examples
@@ -33,13 +36,14 @@
 #'      reason = "Come join this room mang")
 #'   # posts to https://api.hipchat.com/v2/room/My room/invite/your@@friend.org
 #' }
-hipchat_send <- function(type, var, ..., api_token = hipchat_api_token()) {
+hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method = 'POST') {
   url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
   named <- function(x) nzchar(names(x) %||% rep("", length(x)))
   params <- list(...)
   params <- params[named(params)]
+  method <- (if (missing(method)) match_method(url)) %||% method
 
-  httr_with_json(httr::POST(url, body = params, encode = 'json'))
+  httr::content(httr_with_json(httr::POST(url, body = params, encode = 'json')))
 }
 
 #' Hipchat API url.
@@ -48,7 +52,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token()) {
 #' @inheritParams hipchat_send
 #' @return https://api.hipchat.com/v2/...
 #' @examples
-#' stopifnot(hipchat_url('oauth', 'token', use.auth_token = FALSE) == 
+#' stopifnot(hipchat:::hipchat_url('oauth', 'token', use.auth_token = FALSE) == 
 #'   paste(hipchat:::hipchat_api_url, 'oauth', 'token', sep = '/'))
 hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
   args <- list(...)
