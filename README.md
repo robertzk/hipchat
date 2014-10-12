@@ -37,13 +37,13 @@ Getting started
 To test that the package is set up correctly, try messaging yourself:
 
 ```R
-hipchat_message('your_email@organization.com', 'This package is awesome')
+hipchat('your_email@organization.com', 'This package is awesome')
 ```
 
 Here is a semi-exhaustive list of examples of other features:
 
 ```R
-hipchat_message('Room name or email', "I'm in a hipchat!")
+hipchat('Room name or email', "I'm in a hipchat!")
 hipchat_topic('Room name', "This is the new topic")
 hipchat_create_room('Room name')
 hipchat_delete_room('Room name') # Will prompt a confirmation
