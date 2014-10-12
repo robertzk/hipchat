@@ -27,7 +27,12 @@
 #'   hipchat_history('some room', full = TRUE)
 #'   # Full Hipchat API output for the latest 75 messages.
 #' }
-hipchat_history <- function(room_name_or_id, date, timezone = 'UTC', start_index = 0,
+hipchat_history <- function(room_name_or_id, date = 'recent', timezone = 'UTC', start_index = 0,
                             max_results = 100, reverse = TRUE, full = FALSE) {
+  room_id <- sanitize_room(room_name_or_id)
+  date <- sanitize_date(date)
+
+
   
 }
+

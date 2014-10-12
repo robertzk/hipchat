@@ -66,3 +66,21 @@ sanitize_topic <- function(topic) {
   topic
 }
 
+sanitize_date <- function(date) {
+  if (identical(date, 'recent')) return(date)
+
+  if (is(date, 'POSIXct')) date <- as.Date(date)
+  if (!is.character(date) && !is.Date(date))
+    stop("Please provide either a date or a character; I got a ", class(date)[1])
+  if (length(date) != 1) stop("Please provide a single date.")
+
+  if (is.character(date)) {
+    if (!grepl('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', date))
+      stop("Dates must be in ISO-8601 format (e.g., 2014-10-05)")
+    return(date)
+  }
+
+  stopifnot(is(date, 'Date'))
+  strftime(date, "%Y-%m-%d")
+}
+
