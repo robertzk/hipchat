@@ -24,10 +24,10 @@ an ID. If it exists in the list of room IDs accessible to this user,
 it is assumed to be a user ID.
 }
 \examples{
-stopifnot(determine_target('some@guy.com')$type == 'user')
+stopifnot(hipchat:::determine_target('some@guy.com')$type == 'user')
 
 \dontrun{
-  stopifnot(is.numeric(determine_target('Some room')$target))
+  stopifnot(is.numeric(hipchat:::determine_target('Some room')$target))
   # Will be a room ID, assuming "Some room" exists.
 }
 }

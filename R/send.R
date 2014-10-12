@@ -15,6 +15,7 @@
 #'    \code{"GET"} will be used.
 #' @references https://www.hipchat.com/docs/apiv2
 #' @return the JSON output response from the Hipchat API.
+#' @export
 #' @examples
 #' \dontrun{
 #'   hipchat_send('room', 'My room', 'notification',
