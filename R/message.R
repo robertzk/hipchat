@@ -87,9 +87,11 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 #'   # Will be a room ID, assuming "Some room" exists.
 #' }
 determine_target <- function(room_or_user) {
- stopifnot(is.character(room_or_user) || is.numeric(room_or_user)) 
- stopifnot(length(room_or_user) == 1)
+  stopifnot(is.character(room_or_user) || is.numeric(room_or_user)) 
+  stopifnot(length(room_or_user) == 1)
 
- hipchat_room_id(room_or_user)
+
+
+  hipchat_room_id(room_or_user)
 }
 
