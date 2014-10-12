@@ -85,7 +85,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 #'   contain one of \code{c("room", "user")} according as \code{room_or_user}
 #'   is determined to be a room or user.
 #' @examples
-#' stopifnot(determine_target('some@@guy.com')$type == 'user')
+#' stopifnot(hipchat:::determine_target('some@@guy.com')$type == 'user')
 #'
 #' \dontrun{
 #'   stopifnot(is.numeric(hipchat:::determine_target('Some room')$target))
