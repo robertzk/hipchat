@@ -76,13 +76,31 @@ room_cache <- local({
 #' }
 hipchat_topic <- function(room_name_or_id, topic) {
   room_name_or_id <- sanitize_room(room_name_or_id)
-
-  if (!(is.character(topic) && length(topic) == 1))
-    stop("Please provide a single string for the room topic.")
-  if (nchar(topic) > 250) stop("Hipchat room topics must be < 250 characters ",
-    "you provided something ", nchar(topic), " characters long.")
+  topic <- sanitize_topic(topic)
 
   hipchat_send('room', room_name_or_id, 'topic', topic = topic)
 }
 
+#' Create a new Hipchat room. (Must have privileges)
+#'
+#' @param room_name character. Room name.
+#' @param topic character. Topic name (optional).
+#' @param guest_access logical. Whether or not to enable guest access for this room.
+#'   By default, \code{FALSE}.
+#' @param owner_user character or logical. The id, email address, or mention name
+#'   (beginning with an @@) of the room's owner. Defaults to the current user. (Optional)
+#' @param privacy character. Whether the room is available for access by other users or not.
+#'   Must be either \code{'public'} or \code{'private} (default is \code{'public'}).
+#' @return the id of the newly created room.
+#' @export
+#' @examples
+#' \dontrun{
+#'   hipchat_create_room('A new private room', 'With a new topic', privacy = 'private')
+#' }
+hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
+  owner_user, privacy = 'public') {
+  room_name_or_id <- sanitize_room(room_name_or_id)
+
+}
+  
 

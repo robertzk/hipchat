@@ -31,16 +31,25 @@ comma <- function(x, sep = ' and ') {
   else paste(paste(head(x, -1), collapse = ', '), tail(x, 1), sep = sep)
 }
 
-sanitize_room <- function(room_name_or_id) {
+sanitize_room <- function(room_name_or_id, convert_to_id = TRUE) {
   if (!is.numeric(room_name_or_id) && !is.character(room_name_or_id))
     stop("Please provide a room name or ID to set a room; got something ",
          "of class ", class(room_name_or_id)[1])
   if (length(room_name_or_id) != 1) stop("Only one room can be processed at a time.")
 
+  if (!isTRUE(convert_to_id)) return(room_name_or_id)
   if (is.character(room_name_or_id)) room_name_or_id <- local({
     out <- hipchat_room_id(room_name_or_id)
     if (is.na(out)) stop("No Hipchat room ", sQuote(room_name_or_id), " found.")
     out
   }) else room_name_or_id
+}
+
+sanitize_topic <- function(topic) {
+  if (!(is.character(topic) && length(topic) == 1))
+    stop("Please provide a single string for the room topic.")
+  if (nchar(topic) > 250) stop("Hipchat room topics must be < 250 characters ",
+    "you provided something ", nchar(topic), " characters long.")
+  topic
 }
 
