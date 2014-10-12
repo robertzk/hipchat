@@ -2,8 +2,10 @@
 
 export(hipchat)
 export(hipchat_create_room)
+export(hipchat_create_user)
 export(hipchat_history)
 export(hipchat_room_id)
+export(hipchat_rooms)
 export(hipchat_send)
 export(hipchat_topic)
 import(httr)

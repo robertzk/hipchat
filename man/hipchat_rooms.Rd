@@ -4,16 +4,31 @@
 \alias{hipchat_rooms}
 \title{Get the list of all hipchat rooms.}
 \usage{
-hipchat_rooms(api_token = hipchat_api_token())
+hipchat_rooms(max_results = 1000, include_archived = FALSE, full = FALSE,
+  api_token = hipchat_api_token())
 }
 \arguments{
+\item{max_results}{integer. Maximum number of rooms to return. Must be
+between 0 and 1000 -- the default is 1000.}
+
+\item{include_archived}{logical. Whether or not to include archived rooms
+in the results. The default is \code{FALSE}.}
+
+\item{full}{logical. Whether or not to return raw output from the Hipchat
+API. If \code{FALSE} (the default), only a named character vector of
+room IDs will be returned.}
+
 \item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
 }
 \value{
-an integer vector, with names being room names and values
-   being room IDs.
+an integer vector, with names being room names and values being room IDs
+  if \code{full = TRUE}. Otherwise, return the full raw output from the Hipchat
+  API.
 }
 \description{
 Get the list of all hipchat rooms.
+}
+\references{
+https://www.hipchat.com/docs/apiv2/method/get_all_rooms
 }
 
