@@ -12,7 +12,7 @@ hipchat(room_or_user, message, notify = TRUE, color = "yellow",
   message_format = "text", api_token = hipchat_api_token())
 }
 \arguments{
-\item{room_or_user}{character. The room(s) and/or user(s) to send a
+\item{room_or_user}{character or integer. The room(s) and/or user(s) to send a
   message to. Room and/or user IDs will also work, but you will first
   have to obtain the correct ID, so it is easier to user the former.
   Rooms can be specified by full name (e.g., \code{"This room"}) and users

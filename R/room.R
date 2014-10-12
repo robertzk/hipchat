@@ -50,7 +50,6 @@ refresh_room_cache <- local({
   }
 })
 
-
 room_cache <- local({
   .cache <- list()
   structure(list(
