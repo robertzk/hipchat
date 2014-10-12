@@ -32,12 +32,14 @@ hipchat_rooms <- function(api_token = hipchat_api_token()) {
 hipchat_room_id <- function(room_name) {
   stopifnot(is.character(room_name))
 
-  room_in_cache <- function(room_name) is.element(room_name, names(room_cache))
+  room_in_cache <- function(room_name) is.element(room_name, room_cache$getNames())
   if (any(!room_in_cache(room_name))) refresh_room_cache()
+
+  setNames(room_cache$get(room_name), room_name)
 }
 
-refresh_room_cache <- function() {
-  room_cache$set(hipchat_send('room'))
+refresh_room_cache <- function(api_token = hipchat_api_token()) {
+  room_cache$set(hipchat_rooms(api_token))
 }
 
 room_cache <- local({
@@ -45,16 +47,15 @@ room_cache <- local({
   structure(list(
     get = function(key = NULL) {
       if (missing(key)) .cache
-      else .cache[[key]]
+      else .cache[key]
     },
     getNames = function() names(.cache),
     set = function(value, key = NULL) {
       if (missing(key)) .cache <<- value
-      else .cache[[key]] <<- value
+      else .cache[key] <<- value
     }
   ), class = 'room_cache')
 })
-
 
 
 
