@@ -37,13 +37,15 @@
 #'      reason = "Come join this room mang")
 #'   # posts to https://api.hipchat.com/v2/room/My room/invite/your@@friend.org
 #' }
-hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method = 'POST') {
+hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method = 'GET') {
   url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
   named <- function(x) nzchar(names(x) %||% rep("", length(x)))
   params <- list(...)
   params <- params[named(params)]
-  method <- (if (missing(method)) {
-  }) %||% method
+  method <- (if (missing(method)) determine_method(url)) %||% method
+  if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
+    stop(gettextf("HTTP method must be one of %s, got %s", 
+                  comma(methods, ' or '), sQuote(method)))
 
   httr::content(httr_with_json(httr::POST(url, body = params, encode = 'json')))
 }
