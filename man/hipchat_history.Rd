@@ -4,8 +4,8 @@
 \alias{hipchat_history}
 \title{Show the history for a given Hipchat room.}
 \usage{
-hipchat_history(room_name_or_id, date, timezone = "UTC", start_index = 0,
-  max_results = 100, reverse = TRUE, full = FALSE)
+hipchat_history(room_name_or_id, date = "recent", timezone = "UTC",
+  start_index = 0, max_results = 100, reverse = TRUE, full = FALSE)
 }
 \arguments{
 \item{room_name_or_id}{character or integer.}
@@ -31,7 +31,7 @@ If \code{full = TRUE}, the raw output from the Hipchat API is provided as a list
 }
 \value{
 If \code{full = FALSE} (the default), a \code{data.frame}
-  with columns \code{c('id', 'from', 'message', 'date')}. Otherwise, a full list
+  with columns \code{c('id', 'from', 'message', 'color', 'time')}. Otherwise, a full list
   of the JSON response from the Hipchat API. (see References section)
 }
 \description{
@@ -42,7 +42,7 @@ for available timezones, see the tz database at: http://en.wikipedia.org/wiki/Li
 }
 \examples{
 \dontrun{
-  hipchat_history('some room', start_index = 100, max_results = 200)
+  hipchat_history('some room', start_index = 100, max_results = 200, date = Sys.time())
   # A data.frame of the 200 most recent messages with an offset of 100
   hipchat_history('some room', full = TRUE)
   # Full Hipchat API output for the latest 75 messages.

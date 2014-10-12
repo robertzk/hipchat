@@ -15,7 +15,7 @@
 #'   which will return a \code{data.frame} with columns \code{c('id', 'from', 'message', 'date')}.
 #'   If \code{full = TRUE}, the raw output from the Hipchat API is provided as a list.
 #' @return If \code{full = FALSE} (the default), a \code{data.frame}
-#'   with columns \code{c('id', 'from', 'message', 'color', 'time')}. Otherwise, a full list
+#'   with columns \code{c('id', 'from', 'message', 'time', 'color')}. Otherwise, a full list
 #'   of the JSON response from the Hipchat API. (see References section)
 #' @references https://www.hipchat.com/docs/apiv2/method/view_room_history
 #' @note for available timezones, see the tz database at: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
@@ -48,7 +48,7 @@ hipchat_history <- function(room_name_or_id, date = 'recent', timezone = 'UTC', 
 #' 
 #' @param history list. The raw output from the Hipchat API.
 #' @seealso \code{\link{hipchat_history}}
-#' @return A data.frame with columns \code{c('id', 'from', 'message', 'color', 'time')}
+#' @return A data.frame with columns \code{c('id', 'from', 'message', 'time', 'color'}
 abridged <- function(history) {
   history <- history$items
   parse_time <- function(string)
