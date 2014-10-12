@@ -47,9 +47,13 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
     stop(gettextf("HTTP method must be one of %s, got %s", 
                   comma(methods, ' or '), sQuote(method)))
-  method <- getFunction(method, where = getNamespace('httr'))
+  method_call <- getFunction(method, where = getNamespace('httr'))
   unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
-  httr::content(method(url, body = lapply(params, unbox), encode = 'json'))
+
+  if (method == 'GET')
+    httr::content(method_call(modify_url(url, query = params), encode = 'json'))
+  else
+    httr::content(method(url, body = lapply(params, unbox), encode = 'json'))
 }
 
 #' Hipchat API url.
