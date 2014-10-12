@@ -62,7 +62,6 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 
   # We are sending a message to one room/user that is under 10,000 characters.
 
-
 }
 
 #' Determine whether we are sending to a room or user.
@@ -83,7 +82,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 #' stopifnot(determine_target('some@@guy.com')$type == 'user')
 #'
 #' \dontrun{
-#'   stopifnot(is.numeric(determine_target('Some room')$target))
+#'   stopifnot(is.numeric(hipchat:::determine_target('Some room')$target))
 #'   # Will be a room ID, assuming "Some room" exists.
 #' }
 determine_target <- function(room_or_user) {
