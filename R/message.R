@@ -93,6 +93,22 @@ determine_target <- function(room_or_user) {
   if (grepl(fixed = TRUE, '@', room_or_user))
     return(list(target = room_or_user, type = 'user'))
 
-  hipchat_room_id(room_or_user)
+
+  if (is.character(room_or_user)) {
+    # Must be a room
+    room_or_user <- if (grepl('^[0-9]+$', room_or_user))
+      as.integer(room_or_user)
+    else {
+      out <- unname(hipchat_room_id(room_or_user))
+      if (is.na(room_or_user)) stop("Hipchat room %s not found", sQuote(room_or_user))
+      out
+    }
+  }
+
+  stopifnot(is.numeric(room_or_user))
+
+  type <- if (is.element(room_or_user, room_cache$get())) 'room' else 'user'
+
+  list(target = room_or_user, type = type)
 }
 
