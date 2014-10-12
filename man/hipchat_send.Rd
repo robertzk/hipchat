@@ -10,7 +10,8 @@ hipchat_send(type, var, ..., api_token = hipchat_api_token())
 \code{c('addon', 'capabilities', 'emoticon', 'oauth', 'room' 'user')}.}
 
 \item{var}{character. Whatever goes after the \code{type} in the
-hipchat API url, typically room ID, name, or user email.}
+hipchat API url, typically room ID, name, or user email,
+depending on the API path you are calling.}
 
 \item{...}{HTTP arguments to send to the Hipchat API. Unnamed arguments
 will be passed in to the URL; named arguments will be assumed to be
