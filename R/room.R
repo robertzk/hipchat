@@ -113,5 +113,16 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 
   do.call(hipchat_send, params)$id
 }
+
+#' Delete a Hipchat room.
+#'
+#' @inheritParams hipchat_topic
+#' @examples
+#' \dontrun{
+#'    hipchat_create_room('Example room')
+#'    hipchat_delete_room('Example room')
+#' }
+hipchat_delete_room <- function(room_name_or_id) {
+}
   
 
