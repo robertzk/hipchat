@@ -61,7 +61,13 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   }
 
   # We are sending a message to one room/user that is under 10,000 characters.
-
+  target <- determine_target(room_or_user)
+  if (target$type == 'user')
+    hipchat_send('user', target$target, 'message', message = message,
+                 notify = notify, message_format = message_format)
+  else
+    hipchat_send('room', target$target, 'notification', message = message,
+                 notify = notify, color = color, message_format = message_format)
 }
 
 #' Determine whether we are sending to a room or user.
