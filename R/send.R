@@ -48,7 +48,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
     stop(gettextf("HTTP method must be one of %s, got %s", 
                   comma(methods, ' or '), sQuote(method)))
   method <- getFunction(method, where = getNamespace('httr'))
-  httr::content(httr_with_json(method(url, body = params, encode = 'json')))
+  httr::content(method(url, body = lapply(params, jsonlite::unbox), encode = 'json'))
 }
 
 #' Hipchat API url.

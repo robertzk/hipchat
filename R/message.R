@@ -63,7 +63,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   }
 
   color <- color[[1]]
- allowed_colors <- c('yellow', 'red', 'green', 'purple', 'gray', 'random')
+  allowed_colors <- c('yellow', 'red', 'green', 'purple', 'gray', 'random')
   if (!is.character(color) || !is.element(color, allowed_colors)) {
     stop(gettextf(paste("When sending a hipchat message, color must be one of %s, but",
          "you provided %s"), comma(allowed_colors, ' or '),
@@ -77,7 +77,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   if (target$type == 'user')
     hipchat_send('user', target$target, 'message', message = message,
                  notify = notify, message_format = message_format)
-  else
+  else 
     hipchat_send('room', target$target, 'notification', message = message,
                  notify = notify, color = color, message_format = message_format)
 }

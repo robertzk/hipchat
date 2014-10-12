@@ -10,7 +10,7 @@ Depends:
 License: MIT
 Imports:
     httr,
-    rjson
+    jsonlite
 Suggests:
     testthat,
     testthatsomemore,
