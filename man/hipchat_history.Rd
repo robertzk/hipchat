@@ -4,12 +4,51 @@
 \alias{hipchat_history}
 \title{Show the history for a given Hipchat room.}
 \usage{
-hipchat_history(room_name_or_id)
+hipchat_history(room_name_or_id, date, timezone = "UTC", start_index = 0,
+  max_results = 100, reverse = TRUE, full = FALSE)
 }
 \arguments{
 \item{room_name_or_id}{character or integer.}
+
+\item{date}{character or Date. Either the latest date to fetch history,
+or 'recent' to fetch the latest 75 messages. The default is \code{'recent'}.}
+
+\item{timezone}{character. See note. By default, \code{'UTC'}.}
+
+\item{start_index}{integer. The offset for messages to return. If \code{date = 'recent'},
+this parameter has no effect. The default is \code{0}.}
+
+\item{max_results}{integer. Miaxmum number of messages to return. If \code{date = 'recent'},
+this parameter has no effect. By default, \code{100}, but can be any value
+between \code{0} and \code{1000}.}
+
+\item{reverse}{logical. Reverse the output so that the olest message is first.
+The default is \code{TRUE}, but set this to \code{FALSE} for consistent paging.}
+
+\item{full}{logical. Whether or not to display full history. By default, \code{FALSE},
+which will return a \code{data.frame} with columns \code{c('id', 'from', 'message', 'date')}.
+If \code{full = TRUE}, the raw output from the Hipchat API is provided as a list.}
+}
+\value{
+If \code{full = FALSE} (the default), a \code{data.frame}
+  with columns \code{c('id', 'from', 'message', 'date')}. Otherwise, a full list
+  of the JSON response from the Hipchat API. (see References section)
 }
 \description{
 Show the history for a given Hipchat room.
+}
+\note{
+for available timezones, see the tz database at: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+}
+\examples{
+\dontrun{
+  hipchat_history('some room', start_index = 100, max_results = 200)
+  # A data.frame of the 200 most recent messages with an offset of 100
+  hipchat_history('some room', full = TRUE)
+  # Full Hipchat API output for the latest 75 messages.
+}
+}
+\references{
+https://www.hipchat.com/docs/apiv2/method/view_room_history
 }
 

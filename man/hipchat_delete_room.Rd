@@ -12,8 +12,9 @@ hipchat_delete_room(room_name_or_id, confirm = TRUE)
 \item{confirm}{logical. Whether or not to ask for a confirmation message
 before deleting the room. By default, \code{TRUE}. (Deleting rooms
 is dangerous!)}
-
-\item{\code{TRUE}}{or \code{FALSE} according as the room was deleted.}
+}
+\value{
+\code{TRUE} or \code{FALSE} according as the room was deleted.
 }
 \description{
 Delete a Hipchat room.

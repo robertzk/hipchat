@@ -122,7 +122,7 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #' @param confirm logical. Whether or not to ask for a confirmation message
 #'   before deleting the room. By default, \code{TRUE}. (Deleting rooms
 #'   is dangerous!)
-#' @param \code{TRUE} or \code{FALSE} according as the room was deleted.
+#' @return \code{TRUE} or \code{FALSE} according as the room was deleted.
 #' @examples
 #' \dontrun{
 #'    hipchat_create_room('Example room')
