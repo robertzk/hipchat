@@ -90,7 +90,8 @@ determine_target <- function(room_or_user) {
   stopifnot(is.character(room_or_user) || is.numeric(room_or_user)) 
   stopifnot(length(room_or_user) == 1)
 
-
+  if (grepl(fixed = TRUE, '@', room_or_user))
+    return(list(target = room_or_user, type = 'user'))
 
   hipchat_room_id(room_or_user)
 }
