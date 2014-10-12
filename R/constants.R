@@ -12,8 +12,8 @@ http_methods <- list(
            'room/*/notification', 'room/*/reply', 'room/*/share/file',
            'room/*/share/link', 'room/*/webhook', 'user', 'user/*/message',
            'user/*/share/file', 'user/*/share/link'),
-  PUT = c('room/*', 'room/*/member/*', 'room/*/topic', 'update/*',
-          'user/*/photo'),
+  PUT = c('room/*', 'room/*/member/*', 'room/*/topic', 
+          'user/*/photo', 'user/*'),
   DELETE = c('oauth/token/*', 'room/*', 'room/*/member/*', 'room/*/webhook/*',
              'user/*', 'user/*/photo')
 )

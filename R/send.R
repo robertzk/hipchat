@@ -68,18 +68,23 @@ hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
 
 #' Determine the correct HTTP method to use for a given API route.
 #' 
-#' If multiple methods are available (e.g., GET and DELETE), a warning will be issued. 
+#' If multiple methods are available (e.g., GET and DELETE), a warning will be issued
+#' and only the first method will be used.
 #' If no methods are available, it is probably an invalid API route.
 #' In this case, a warning will be issued and GET will be used.
 #'
-#' 
+#' @param url character. The HTTP URL.
+#' @examples
+#' stopifnot(determine_method('nonexistent') == 'GET') # Warns about no method
+#' stopifnot(determine_method('room') == 'GET') # Warns about multiple methods
+#' stopifnot(determine_method('user/some@guy.com/message') == 'POST') # No warning
 determine_method <- function(url) {
   method <- match_method(url)
   if (length(method) > 1) {
     warning(gettextf(
-      "Multiple HTTP methods (%s) found for route %s, defaulting to %s. ",
-      "If you would like to use %s, specify it with ",
-      "hipchat_send(method = '%s', ...)", comma(method), sQuote(url), method[1],
+      paste("Multiple HTTP methods (%s) found for route %s, defaulting to %s.",
+      "If you would like to use %s, specify it with",
+      "hipchat_send(method = '%s', ...)"), comma(method), sQuote(url), method[1],
       comma(method[-1], ' or '), method[2]))
     method <- method[1]
   } else if (length(method) == 0) {
