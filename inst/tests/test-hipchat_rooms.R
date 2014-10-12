@@ -40,8 +40,6 @@ context('hipchat_topic')
 test_that('it errors when an invalid room or topic is given', {
   expect_error(hipchat_topic(list(), 'a'), 'provide a room name or ID')
   expect_error(hipchat_topic(c('a','b'), 'a'), 'Only one room')
-  stub(hipchat_topic, hipchat_room_id) <- function(...) NA_integer_
-  expect_error(hipchat_topic('a', 'b'), 'No Hipchat room')
   stub(hipchat_topic, sanitize_room) <- function(...) ..1
   expect_error(hipchat_topic('a', 5), 'provide a single string')
   expect_error(hipchat_topic('a', c('a','b')), 'provide a single string')
