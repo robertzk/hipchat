@@ -12,6 +12,8 @@ hipchat_delete_room(room_name_or_id, confirm = TRUE)
 \item{confirm}{logical. Whether or not to ask for a confirmation message
 before deleting the room. By default, \code{TRUE}. (Deleting rooms
 is dangerous!)}
+
+\item{\code{TRUE}}{or \code{FALSE} according as the room was deleted.}
 }
 \description{
 Delete a Hipchat room.
@@ -19,7 +21,8 @@ Delete a Hipchat room.
 \examples{
 \dontrun{
    hipchat_create_room('Example room')
-   hipchat_delete_room('Example room')
+   hipchat_delete_room('Example room') # Will ask a confirmation message.
+   hipchat_delete_room('Example room', confirm = FALSE) # Dangerous! No confirmation.
 }
 }
 

@@ -126,7 +126,8 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #' @examples
 #' \dontrun{
 #'    hipchat_create_room('Example room')
-#'    hipchat_delete_room('Example room')
+#'    hipchat_delete_room('Example room') # Will ask a confirmation message.
+#'    hipchat_delete_room('Example room', confirm = FALSE) # Dangerous! No confirmation.
 #' }
 hipchat_delete_room <- function(room_name_or_id, confirm = TRUE) {
   room_id <- sanitize_room(room_name_or_id)

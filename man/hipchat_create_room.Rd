@@ -8,7 +8,7 @@ hipchat_create_room(room_name, topic = NULL, guest_access = FALSE,
   owner_user, privacy = "public")
 }
 \arguments{
-\item{room_name}{character. Room name.}
+\item{room_name}{character. Room name. Maximum 100 characters.}
 
 \item{topic}{character. Topic name (optional).}
 
