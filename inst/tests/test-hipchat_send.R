@@ -21,3 +21,4 @@ test_that('it correctly sends to a room', {
                c('room', 'room', 'notification', 'hey'))
 })
 
+

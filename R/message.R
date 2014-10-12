@@ -42,6 +42,8 @@
 hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
                     message_format = 'text', api_token = hipchat_api_token()) {
   stopifnot(is.character(room_or_user) || is.numeric(room_or_user))
+  stopifnot(is.logical(notify) && length(notify) == 1)
+  stopifnot(identical(message_format, 'text') || identical(message_format, 'html'))
 
   rerun <- function(room_or_user, message)
     hipchat(room_or_user, message = message, notify = notify, color = color,
@@ -58,6 +60,16 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
     first_part <- substring(message, 1, 9999)
     second_part <- substring(message, 10000, nchar(message))
     return(all(sapply(c(first_part, second_part), rerun, message = message)))
+  }
+
+  color <- color[[1]]
+ allowed_colors <- c('yellow', 'red', 'green', 'purple', 'gray', 'random')
+  if (!is.character(color) || !is.element(color, allowed_colors)) {
+    stop(gettextf(paste("When sending a hipchat message, color must be one of %s, but",
+         "you provided %s"), comma(allowed_colors, ' or '),
+         if (is.character(color)) sQuote(color)
+         else paste('something of class', class(color))
+    ))
   }
 
   # We are sending a message to one room/user that is under 10,000 characters.
