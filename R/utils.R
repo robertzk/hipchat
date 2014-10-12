@@ -26,9 +26,9 @@ match_method <- function(url) {
 }
 
 # comma(c('a', 'b', 'c')) == 'a, b, and c'
-comma <- function(x) {
+comma <- function(x, sep = ' and ') {
   if (length(x) < 2) x
-  else paste(paste(head(x, -1), collapse = ', '), tail(x, 1), sep = ' and ')
+  else paste(paste(head(x, -1), collapse = ', '), tail(x, 1), sep = sep)
 }
 
 # A temporary workaround until hadley fixes httr

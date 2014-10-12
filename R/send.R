@@ -47,7 +47,8 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
       warning(gettextf(
         "Multiple HTTP methods (%s) found for route %s, defaulting to %s. ",
         "If you would like to use %s, specify it with ",
-        "hipchat_send(method = '%s', ...)")
+        "hipchat_send(method = '%s', ...)", comma(method), sQuote(url), method[1],
+        )
         this is ")
 
   }) %||% method
