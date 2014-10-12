@@ -39,8 +39,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token()) {
   params <- list(...)
   params <- params[named(params)]
 
-  browser()
-  httr::POST(url, body = params)
+  httr_with_json(httr::POST(url, body = params, encode = 'json'))
 }
 
 #' Hipchat API url.

@@ -10,6 +10,7 @@ hipchat_api_token <- function()
 # A temporary workaround until hadley fixes httr
 # https://github.com/hadley/httr/issues/159
 httr_with_json <- function(expr) {
+  suppressPackageStartupMessages({ library(jsonlite); library(rjson) })
   testthatsomemore::package_stub('jsonlite', 'toJSON', function(...) rjson::toJSON(...), eval.parent(expr))
 }
 
