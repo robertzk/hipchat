@@ -6,11 +6,27 @@
 #' Get the list of all hipchat rooms.
 #'
 #' @inheritParams hipchat_send
-#' @return an integer vector, with names being room names and values
-#'    being room IDs.
-hipchat_rooms <- function(api_token = hipchat_api_token()) {
-  rooms <- hipchat_send('room', method = 'GET', api_token = api_token)
-  do.call(c, lapply(rooms$items, function(item) setNames(item$id, item$name)))
+#' @param max_results integer. Maximum number of rooms to return. Must be
+#'   between 0 and 1000 -- the default is 1000.
+#' @param include_archived logical. Whether or not to include archived rooms
+#'   in the results. The default is \code{FALSE}.
+#' @param full logical. Whether or not to return raw output from the Hipchat
+#'   API. If \code{FALSE} (the default), only a named character vector of
+#'   room IDs will be returned.
+#' @export
+#' @references https://www.hipchat.com/docs/apiv2/method/get_all_rooms
+#' @return an integer vector, with names being room names and values being room IDs
+#'   if \code{full = TRUE}. Otherwise, return the full raw output from the Hipchat
+#'   API.
+hipchat_rooms <- function(max_results = 1000, include_archived = FALSE, full = FALSE, api_token = hipchat_api_token()) {
+  stopifnot(is.numeric(max_results) && length(max_results) == 1 && max_results >= 0 && max_results <= 1000)
+  stopifnot(identical(include_archived, TRUE) || identical(include_archived, FALSE))
+  stopifnot(identical(full, TRUE) || identical(full, FALSE))
+
+  rooms <- hipchat_send('room', method = 'GET', `max-results` = max_results,
+                        include_archived = include_archived, api_token = api_token)
+  parse <- function(item) if (full) item else setNames(item$id, item$name)
+  do.call(c, lapply(rooms$items, parse))
 }
 
 #' Convert a Hipchat room name to an ID.
@@ -141,5 +157,7 @@ hipchat_delete_room <- function(room_name_or_id, confirm = TRUE) {
   hipchat_send('room', room_id, method = 'DELETE')
   TRUE
 }
+
+#' 
   
 
