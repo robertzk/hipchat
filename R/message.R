@@ -51,6 +51,13 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   if (length(message) > 1) return(all(sapply(message, rerun, room_or_user = room_or_user)))
   if (length(room_or_user) == 0 || length(message) == 0)
     stop("Please specify a room/user and a message.")
+
+  message <- tryCatch(error = function(e) {
+    stop(gettextf(paste("Message must be convertible to character --",
+      "got something of class %s with following error when running",
+      "as.character on it: %s"), sQuote(class(message)[1]), e$message))
+  }, as.character(message))
+
   if (nchar(message) >= 10000) {
     first_part <- substring(message, 1, 9999)
     second_part <- substring(message, 10000, nchar(message))
