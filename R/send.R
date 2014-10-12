@@ -41,7 +41,16 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   named <- function(x) nzchar(names(x) %||% rep("", length(x)))
   params <- list(...)
   params <- params[named(params)]
-  method <- (if (missing(method)) match_method(url)) %||% method
+  method <- (if (missing(method)) {
+    method <- match_method(url)
+    if (length(method) > 1)
+      warning(gettextf(
+        "Multiple HTTP methods (%s) found for route %s, defaulting to %s. ",
+        "If you would like to use %s, specify it with ",
+        "hipchat_send(method = '%s', ...)")
+        this is ")
+
+  }) %||% method
 
   httr::content(httr_with_json(httr::POST(url, body = params, encode = 'json')))
 }

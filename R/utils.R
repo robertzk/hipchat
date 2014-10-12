@@ -11,11 +11,24 @@ hipchat_api_token <- function()
 #' Find appropriate HTTP method for a given Hipchat URL.
 #'
 #' @param url character. The URL to analyze.
-#' @return \code{"GET"} or \code{"POST"}. If no appropriate method is found, \code{NULL}.
+#' @return character vector of applicable methods, from
+#'    \code{c("GET", "POST", "PUT", "DELETE"}.
 match_method <- function(url) {
   url <- gsub(fixed = TRUE, paste0(hipchat_api_url, '/'), '', url)
   url <- strsplit(url, '?', fixed = TRUE)[[1]]
 
+  has_method <- function(method) {
+    routes <- paste0("^", gsub("*", "[^/]+", http_methods[[method]], fixed = TRUE), "$")
+    any(sapply(routes, function(route) grepl(route, url)))
+  }
+
+  names(which(vapply(names(http_methods), has_method, logical(1))))
+}
+
+# comma(c('a', 'b', 'c')) == 'a, b, and c'
+comma <- function(x) {
+  if (length(x) < 2) x
+  else paste(paste(head(x, -1), collapse = ', '), tail(x, 1), sep = ' and ')
 }
 
 # A temporary workaround until hadley fixes httr
