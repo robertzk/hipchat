@@ -57,7 +57,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
 #' @inheritParams hipchat_send
 #' @return https://api.hipchat.com/v2/...
 #' @examples
-#' stopifnot(hipchat:::hipchat_url('oauth', 'token', use.auth_token = FALSE) == 
+#' stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) == 
 #'   paste(hipchat:::hipchat_api_url, 'oauth', 'token', sep = '/'))
 hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
   args <- list(...)

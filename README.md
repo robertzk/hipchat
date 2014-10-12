@@ -3,6 +3,7 @@ Hipchat R integration [![Build Status](https://travis-ci.org/robertzk/hipchat.sv
 
 Features
 --------
+**NOTE**: This package is under rapid development and this list is a lie.
 
 * Send messages to rooms or private users
 * Set a room's topic

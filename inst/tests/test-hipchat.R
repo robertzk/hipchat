@@ -25,3 +25,4 @@ test_that("it errors when the message_format is not 'text' or 'html'", {
   expect_error(hipchat('x', 'm', message_format = 'yo'))
   expect_error(hipchat('x', 'm', message_format = FALSE))
 })
+
