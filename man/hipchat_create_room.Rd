@@ -19,12 +19,17 @@ By default, \code{FALSE}.}
 (beginning with an @) of the room's owner. Defaults to the current user. (Optional)}
 
 \item{privacy}{character. Whether the room is available for access by other users or not.
-Must be either \code{'public'} or \code{'private} (default is \code{'public'}).}
+Must be either \code{'public'} or \code{'private'} (default is \code{'public'}).}
 }
 \value{
 the id of the newly created room.
 }
 \description{
 Create a new Hipchat room. (Must have privileges)
+}
+\examples{
+\dontrun{
+  hipchat_create_room('A new private room', 'With a new topic', privacy = 'private')
+}
 }
 

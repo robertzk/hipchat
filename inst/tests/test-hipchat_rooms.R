@@ -48,5 +48,18 @@ test_that('it errors when an invalid room or topic is given', {
   expect_error(hipchat_topic('a', paste(rep('a', 251), collapse = '')), 'must be < 250')
 })
 
+context('hipchat_create_room')
+
+test_that('it errors when an invalid room or topic or user is given', {
+  expect_error(hipchat_create_room(list(), 'a'), 'provide a room name or ID')
+  expect_error(hipchat_create_room(c('a','b'), 'a'), 'Only one room')
+  stub(hipchat_create_room, sanitize_room) <- function(...) ..1
+  expect_error(hipchat_create_room('a', 5), 'provide a single string')
+  expect_error(hipchat_create_room('a', c('a','b')), 'provide a single string')
+  expect_error(hipchat_create_room('a', paste(rep('a', 251), collapse = '')), 'must be < 250')
+  expect_error(hipchat_create_room(1, 'a'))
+  expect_error(hipchat_create_room('a', 'a', owner_user = 'foo'), "must contain an '@'")
+  expect_error(hipchat_create_room('a', 'a', owner_user = list()), "provide a user name or ID")
+})
 
 

@@ -45,6 +45,19 @@ sanitize_room <- function(room_name_or_id, convert_to_id = TRUE) {
   }) else room_name_or_id
 }
 
+sanitize_user <- function(user_name_or_id) {
+  if (!is.numeric(user_name_or_id) && !is.character(user_name_or_id))
+    stop("Please provide a user name or ID to set a room; got something ",
+         "of class ", class(user_name_or_id)[1])
+  if (length(user_name_or_id) != 1) stop("Only one user can be processed at a time.")
+
+  if (is.character(user_name_or_id) && !grepl(fixed = TRUE, '@', user_name_or_id))
+    stop("Hipchat user references must contain an '@' (e.g. @SomeUser or ",
+         "some@user.org)")
+
+  user_name_or_id
+}
+
 sanitize_topic <- function(topic) {
   if (!(is.character(topic) && length(topic) == 1))
     stop("Please provide a single string for the room topic.")

@@ -90,7 +90,7 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #' @param owner_user character or logical. The id, email address, or mention name
 #'   (beginning with an @@) of the room's owner. Defaults to the current user. (Optional)
 #' @param privacy character. Whether the room is available for access by other users or not.
-#'   Must be either \code{'public'} or \code{'private} (default is \code{'public'}).
+#'   Must be either \code{'public'} or \code{'private'} (default is \code{'public'}).
 #' @return the id of the newly created room.
 #' @export
 #' @examples
@@ -99,8 +99,19 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #' }
 hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
   owner_user, privacy = 'public') {
-  room_name_or_id <- sanitize_room(room_name_or_id)
+  room_name<- sanitize_room(room_name, convert_to_id = FALSE)
+  stopifnot(is.character(room_name))
+  if (!missing(topic)) topic <- sanitize_topic(topic)
+  stopifnot(identical(privacy, 'public') || identical(privacy, 'private'))
 
+  guest_access <- isTRUE(guest_access)
+
+  params <- list('room', topic = topic, guest_access = guest_access,
+    name = room_name, privacy = privacy)
+  if (!missing(owner_user)) params$owner_user <- sanitize_user(owner_user)
+  params$method <- 'POST'
+
+  do.call(hipchat_send, params)$id
 }
   
 
