@@ -70,7 +70,7 @@ sanitize_date <- function(date) {
   if (identical(date, 'recent')) return(date)
 
   if (is(date, 'POSIXct')) date <- as.Date(date)
-  if (!is.character(date) && !is.Date(date))
+  if (!is.character(date) && !is(date, 'Date'))
     stop("Please provide either a date or a character; I got a ", class(date)[1])
   if (length(date) != 1) stop("Please provide a single date.")
 

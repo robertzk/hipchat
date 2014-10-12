@@ -22,7 +22,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#'   hipchat_history('some room', start_index = 100, max_results = 200)
+#'   hipchat_history('some room', start_index = 100, max_results = 200, date = Sys.time())
 #'   # A data.frame of the 200 most recent messages with an offset of 100
 #'   hipchat_history('some room', full = TRUE)
 #'   # Full Hipchat API output for the latest 75 messages.
@@ -33,15 +33,15 @@ hipchat_history <- function(room_name_or_id, date = 'recent', timezone = 'UTC', 
   date <- sanitize_date(date)
   stopifnot(is.character(timezone) && length(timezone) == 1)
   stopifnot(is.numeric(start_index) && start_index >= 0)
-  stopifnot(is.numeric(max_results) && max_results >= 0 && max_results <= 100)
+  stopifnot(is.numeric(max_results) && max_results >= 0 && max_results <= 1000)
   stopifnot(identical(reverse, TRUE) || identical(reverse, FALSE))
   stopifnot(identical(full, TRUE) || identical(full, FALSE))
 
   history <- hipchat_send('room', room_id, 'history', date = date, timezone = timezone,
-    start_index = start_index, max_results = max_results, reverse = reverse)
+    `start-index` = start_index, `max-results` = max_results, reverse = reverse)
 
-  if (full) abridged(history)
-  else history
+  if (full) history
+  else abridged(history)
 }
 
 #' Convert a full history list from Hipchat to an abridged data.frame
