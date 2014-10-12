@@ -55,9 +55,16 @@ abridged <- function(history) {
     strptime(gsub(":([0-9]{2})$", "\\1", string), "%Y-%m-%dT%H:%M:%OS%z", tz = 'GMT')
   cols <- c('id', 'from', 'message', 'date', 'color')
   abridge <- function(item) {
-    subset(within(data.frame(item[cols]), time <- parse_time(date)), select = -date)
+    if (is.list(item$from)) item$from <- item$from$name %||% item$from$id
+    for (col in cols) if (!is.element(col, names(item))) item[[col]] <- NA
+    df <- subset(within(data.frame(item[cols]), time <- parse_time(date)), select = -date)
+    df[gsub('^date$', 'time', cols)]
   }
-  do.call(rbind, lapply(history, abridge))
+  
+  history <- do.call(rbind, lapply(history, abridge))
+  history$color <- factor(history$color, levels = c(
+    'yellow', 'red', 'green', 'purple', 'gray'))
+  history
 }
 
 
