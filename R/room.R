@@ -3,6 +3,16 @@
 # method of fetching the room ID for a given room name, and caching
 # this if possible.
 
+#' Get the list of all hipchat rooms.
+#'
+#' @inheritParams hipchat_send
+#' @return an integer vector, with names being room names and values
+#'    being room IDs.
+hipchat_rooms <- function(api_token = hipchat_api_token()) {
+  rooms <- hipchat_send('room', method = 'GET', api_token = api_token)
+  do.call(c, lapply(rooms$items, function(item) setNames(item$id, item$name)))
+}
+
 #' Convert a Hipchat room name to an ID.
 #' 
 #' This function will call the \code{/v2/room} API route if necessary to 
@@ -27,7 +37,7 @@ hipchat_room_id <- function(room_name) {
 }
 
 refresh_room_cache <- function() {
-  # room_cache$set(hipchat_send('rooms'))
+  room_cache$set(hipchat_send('room'))
 }
 
 room_cache <- local({

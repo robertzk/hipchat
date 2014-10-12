@@ -6,9 +6,18 @@
 \usage{
 determine_method(url)
 }
+\arguments{
+\item{url}{character. The HTTP URL.}
+}
 \description{
-If multiple methods are available (e.g., GET and DELETE), a warning will be issued.
+If multiple methods are available (e.g., GET and DELETE), a warning will be issued
+and only the first method will be used.
 If no methods are available, it is probably an invalid API route.
 In this case, a warning will be issued and GET will be used.
+}
+\examples{
+stopifnot(determine_method('nonexistent') == 'GET') # Warns about no method
+stopifnot(determine_method('room') == 'GET') # Warns about multiple methods
+stopifnot(determine_method('user/some@guy.com/message') == 'POST') # No warning
 }
 

@@ -79,7 +79,7 @@ hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
 #' @examples
 #' stopifnot(determine_method('nonexistent') == 'GET') # Warns about no method
 #' stopifnot(determine_method('room') == 'GET') # Warns about multiple methods
-#' stopifnot(determine_method('user/some@guy.com/message') == 'POST') # No warning
+#' stopifnot(determine_method('user/some@@guy.com/message') == 'POST') # No warning
 determine_method <- function(url) {
   method <- match_method(url)
   if (length(method) > 1) {

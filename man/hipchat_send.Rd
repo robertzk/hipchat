@@ -5,7 +5,7 @@
 \title{Send a message to the hipchat API v2.}
 \usage{
 hipchat_send(type, var, ..., api_token = hipchat_api_token(),
-  method = "POST")
+  method = "GET")
 }
 \arguments{
 \item{type}{character. One of the native Hipchat API domains:
