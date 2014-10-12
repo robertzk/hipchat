@@ -47,7 +47,7 @@ hipchat('Room name or email', "I'm in a hipchat!")
 hipchat_topic('Room name', "This is the new topic")
 hipchat_create_room('Room name')
 hipchat_delete_room('Room name') # Will prompt a confirmation
-hipchat_history('Room name')
+hipchat_history('Room name') # A data.frame with messages
 hipchat_list_rooms('Group name')
 hichat_create_user(...)
 hipchat_update_user(...)

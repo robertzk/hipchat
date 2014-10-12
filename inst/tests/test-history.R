@@ -28,3 +28,4 @@ test_that('it can abridge a simple example', {
 
   expect_identical(abridged(history), expected)
 })
+
