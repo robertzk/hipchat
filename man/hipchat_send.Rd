@@ -4,7 +4,8 @@
 \alias{hipchat_send}
 \title{Send a message to the hipchat API v2.}
 \usage{
-hipchat_send(type, var, ..., api_token = hipchat_api_token())
+hipchat_send(type, var, ..., api_token = hipchat_api_token(),
+  method = "POST")
 }
 \arguments{
 \item{type}{character. One of the native Hipchat API domains:
@@ -19,6 +20,11 @@ will be passed in to the URL; named arguments will be assumed to be
 API parameters. See the examples section.}
 
 \item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
+
+\item{method}{character. HTTP method. Either \code{"GET"}, \code{"POST"},
+\code{"PUT"}, or \code{"DELETE"}. By default, the API url will be
+inspected and matched with the appropriate method. Otherwise,
+\code{"GET"} will be used.}
 }
 \value{
 the JSON output response from the Hipchat API.
