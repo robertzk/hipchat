@@ -38,9 +38,18 @@ hipchat_room_id <- function(room_name) {
   setNames(room_cache$get(room_name), room_name)
 }
 
-refresh_room_cache <- function(api_token = hipchat_api_token()) {
-  room_cache$set(hipchat_rooms(api_token))
-}
+refresh_room_cache <- local({
+  last_refreshed <- as.POSIXct(as.Date(0, origin = "1970-01-01"))
+  function(api_token = hipchat_api_token()) {
+    refresh_interval <- Sys.time() - last_refreshed
+    units(refresh_interval) <- 'secs'
+    if (as.integer(refresh_interval) > 5) { # Limit API refreshes to every 5 seconds
+      last_refreshed <<- Sys.time()
+      room_cache$set(hipchat_rooms(api_token))
+    }
+  }
+})
+
 
 room_cache <- local({
   .cache <- list()

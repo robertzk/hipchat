@@ -11,3 +11,7 @@ test_that('it errors when a non-character is passed', {
   expect_error(hipchat('a', TRUE))
   expect_error(hipchat(TRUE, 'a'))
 })
+
+
+
+

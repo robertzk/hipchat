@@ -1,6 +1,6 @@
 #' Send a message to a Hipchat room or user.
 #'
-#' @param room_or_user character. The room(s) and/or user(s) to send a
+#' @param room_or_user character or integer. The room(s) and/or user(s) to send a
 #'   message to. Room and/or user IDs will also work, but you will first
 #'   have to obtain the correct ID, so it is easier to user the former.
 #'   Rooms can be specified by full name (e.g., \code{"This room"}) and users
@@ -61,5 +61,35 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   }
 
   # We are sending a message to one room/user that is under 10,000 characters.
+
+
+}
+
+#' Determine whether we are sending to a room or user.
+#' 
+#' If there is a \code{@@} character, we assume it is a user. Otherwise,
+#' we assume it is a room. If it consists of all numbers, we assume it is
+#' an ID. If it exists in the list of room IDs accessible to this user,
+#' (see \code{\link{hipchat_rooms}}) it is assumed to be a room ID. Otherwise,
+#' it is assumed to be a user ID.
+#'
+#' @param room_or_user character or integer
+#' @return a list with two keys, \code{target} and \code{type}.
+#'   The former will be an attempt to coerce the value to an ID (so that
+#'   room IDs are preferred to room names). The \code{type} key will
+#'   contain one of \code{c("room", "user")} according as \code{room_or_user}
+#'   is determined to be a room or user.
+#' @examples
+#' stopifnot(determine_target('some@@guy.com')$type == 'user')
+#'
+#' \dontrun{
+#'   stopifnot(is.numeric(determine_target('Some room')$target))
+#'   # Will be a room ID, assuming "Some room" exists.
+#' }
+determine_target <- function(room_or_user) {
+ stopifnot(is.character(room_or_user) || is.numeric(room_or_user)) 
+ stopifnot(length(room_or_user) == 1)
+
+ hipchat_room_id(room_or_user)
 }
 
