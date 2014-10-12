@@ -84,3 +84,8 @@ sanitize_date <- function(date) {
   strftime(date, "%Y-%m-%d")
 }
 
+parse_time <- function(string)
+  strptime(gsub(":([0-9]{2})$", "\\1", string), "%Y-%m-%dT%H:%M:%OS%z", tz = 'GMT')
+
+as.color <- function(x) factor(x, levels = c(
+    'yellow', 'red', 'green', 'purple', 'gray'))

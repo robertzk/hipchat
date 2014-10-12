@@ -10,7 +10,7 @@ abridged(history)
 \item{history}{list. The raw output from the Hipchat API.}
 }
 \value{
-A data.frame with columns \code{c('id', 'from', 'message', 'color', 'time')}
+A data.frame with columns \code{c('id', 'from', 'message', 'time', 'color')}
 }
 \description{
 Convert a full history list from Hipchat to an abridged data.frame

@@ -31,7 +31,7 @@ If \code{full = TRUE}, the raw output from the Hipchat API is provided as a list
 }
 \value{
 If \code{full = FALSE} (the default), a \code{data.frame}
-  with columns \code{c('id', 'from', 'message', 'color', 'time')}. Otherwise, a full list
+  with columns \code{c('id', 'from', 'message', 'time', 'color')}. Otherwise, a full list
   of the JSON response from the Hipchat API. (see References section)
 }
 \description{
@@ -42,6 +42,7 @@ for available timezones, see the tz database at: http://en.wikipedia.org/wiki/Li
 }
 \examples{
 \dontrun{
+  hipchat_history('some room')
   hipchat_history('some room', start_index = 100, max_results = 200, date = Sys.time())
   # A data.frame of the 200 most recent messages with an offset of 100
   hipchat_history('some room', full = TRUE)

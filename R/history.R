@@ -22,6 +22,7 @@
 #' @export
 #' @examples
 #' \dontrun{
+#'   hipchat_history('some room')
 #'   hipchat_history('some room', start_index = 100, max_results = 200, date = Sys.time())
 #'   # A data.frame of the 200 most recent messages with an offset of 100
 #'   hipchat_history('some room', full = TRUE)
@@ -32,8 +33,8 @@ hipchat_history <- function(room_name_or_id, date = 'recent', timezone = 'UTC', 
   room_id <- sanitize_room(room_name_or_id)
   date <- sanitize_date(date)
   stopifnot(is.character(timezone) && length(timezone) == 1)
-  stopifnot(is.numeric(start_index) && start_index >= 0)
-  stopifnot(is.numeric(max_results) && max_results >= 0 && max_results <= 1000)
+  stopifnot(is.numeric(start_index) &&  length(start_index) == 1 && start_index >= 0)
+  stopifnot(is.numeric(max_results) && length(max_results) == 1 && max_results >= 0 && max_results <= 1000)
   stopifnot(identical(reverse, TRUE) || identical(reverse, FALSE))
   stopifnot(identical(full, TRUE) || identical(full, FALSE))
 
@@ -48,22 +49,20 @@ hipchat_history <- function(room_name_or_id, date = 'recent', timezone = 'UTC', 
 #' 
 #' @param history list. The raw output from the Hipchat API.
 #' @seealso \code{\link{hipchat_history}}
-#' @return A data.frame with columns \code{c('id', 'from', 'message', 'time', 'color'}
+#' @return A data.frame with columns \code{c('id', 'from', 'message', 'time', 'color')}
 abridged <- function(history) {
   history <- history$items
-  parse_time <- function(string)
-    strptime(gsub(":([0-9]{2})$", "\\1", string), "%Y-%m-%dT%H:%M:%OS%z", tz = 'GMT')
   cols <- c('id', 'from', 'message', 'date', 'color')
   abridge <- function(item) {
     if (is.list(item$from)) item$from <- item$from$name %||% item$from$id
     for (col in cols) if (!is.element(col, names(item))) item[[col]] <- NA
-    df <- subset(within(data.frame(item[cols]), time <- parse_time(date)), select = -date)
+    df <- subset(within(data.frame(item[cols], stringsAsFactors = FALSE),
+                        time <- parse_time(date)), select = -date)
     df[gsub('^date$', 'time', cols)]
   }
   
   history <- do.call(rbind, lapply(history, abridge))
-  history$color <- factor(history$color, levels = c(
-    'yellow', 'red', 'green', 'purple', 'gray'))
+  history$color <- as.color(history$color)
   history
 }
 
