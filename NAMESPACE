@@ -3,4 +3,5 @@
 export(hipchat)
 export(hipchat_room_id)
 export(hipchat_send)
+export(hipchat_topic)
 import(httr)

@@ -65,5 +65,32 @@ room_cache <- local({
   ), class = 'room_cache')
 })
 
+#' Change the topic of a room.
+#'
+#' @param room_name_or_id character or integer.
+#' @param topic character. Must be under 250 characters.
+#' @export
+#' @examples
+#' \dontrun{
+#'   hipchat_topic('Some room', 'This is the new topic')
+#' }
+hipchat_topic <- function(room_name_or_id, topic) {
+  if (!is.numeric(room_name_or_id) && !is.character(room_name_or_id))
+    stop("Please provide a room name or ID to set a room; got something ",
+         "of class ", class(room_name_or_id)[1])
+  if (length(room_name_or_id) != 1) stop("Topics can only be set one room at a time.")
+  if (!(is.character(topic) && length(topic) == 1))
+    stop("Please provide a single string for the room topic.")
+  if (nchar(topic) > 250) stop("Hipchat room topics must be < 250 characters ",
+    "you provided something ", nchar(topic), " characters long.")
+
+  if (is.character(room_name_or_id)) room_name_or_id <- local({
+    out <- hipchat_room_id(room_name_or_id)
+    if (is.na(out)) stop("No Hipchat room ", sQuote(room_name_or_id), " found.")
+    out
+  })
+
+  hipchat_send('room', room_name_or_id, 'topic', topic = topic)
+}
 
 
