@@ -58,6 +58,21 @@ test_that('it errors when an invalid room or topic or user is given', {
   expect_error(hipchat_create_room(1, 'a'))
   expect_error(hipchat_create_room('a', 'a', owner_user = 'foo'), "must contain an '@'")
   expect_error(hipchat_create_room('a', 'a', owner_user = list()), "provide a user name or ID")
+  expect_error(hipchat_create_room(paste(rep('a', 101), collapse = '')), 'at most 100')
 })
 
+context('hipchat_delete_room')
+
+test_that('it prompts for confirmation before deleting a room', {
+  stub(hipchat_delete_room, readline) <- function(...) "NO"
+  tmp <- new.env(); tmp$x <- 0
+  stub(hipchat_delete_room, hipchat_send) <- function(...) { tmp$x <- tmp$x + 1; tmp$args <- list(...) }
+  hipchat_delete_room(99)
+  expect_equal(tmp$x, 0, info = 'room should not have been deleted through hipchat_send')
+  stub(hipchat_delete_room, readline) <- function(...) eval.parent(quote(confirm))
+  hipchat_delete_room(99)
+  expect_equal(tmp$x, 1, info = 'room should have been deleted through hipchat_send')
+  expect_identical(tmp$args, list('room', 99, method = 'DELETE'),
+                   info = 'correct hipchat room delete API path should have been called')
+})
 

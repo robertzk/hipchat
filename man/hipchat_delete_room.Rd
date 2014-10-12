@@ -4,10 +4,14 @@
 \alias{hipchat_delete_room}
 \title{Delete a Hipchat room.}
 \usage{
-hipchat_delete_room(room_name_or_id)
+hipchat_delete_room(room_name_or_id, confirm = TRUE)
 }
 \arguments{
 \item{room_name_or_id}{character or integer.}
+
+\item{confirm}{logical. Whether or not to ask for a confirmation message
+before deleting the room. By default, \code{TRUE}. (Deleting rooms
+is dangerous!)}
 }
 \description{
 Delete a Hipchat room.

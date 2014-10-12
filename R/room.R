@@ -83,7 +83,7 @@ hipchat_topic <- function(room_name_or_id, topic) {
 
 #' Create a new Hipchat room. (Must have privileges)
 #'
-#' @param room_name character. Room name.
+#' @param room_name character. Room name. Maximum 100 characters.
 #' @param topic character. Topic name (optional).
 #' @param guest_access logical. Whether or not to enable guest access for this room.
 #'   By default, \code{FALSE}.
@@ -99,16 +99,18 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #' }
 hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
   owner_user, privacy = 'public') {
-  room_name<- sanitize_room(room_name, convert_to_id = FALSE)
+  room_name <- sanitize_room(room_name, convert_to_id = FALSE)
   stopifnot(is.character(room_name))
-  if (!missing(topic)) topic <- sanitize_topic(topic)
+  if (nchar(room_name) > 100)
+    stop("Hipchat rooms can be at most 100 characters, you provided ", nchar(room_name))
   stopifnot(identical(privacy, 'public') || identical(privacy, 'private'))
 
   guest_access <- isTRUE(guest_access)
 
-  params <- list('room', topic = topic, guest_access = guest_access,
+  params <- list('room', guest_access = guest_access,
     name = room_name, privacy = privacy)
   if (!missing(owner_user)) params$owner_user <- sanitize_user(owner_user)
+  if (!missing(topic)) params$topic <- sanitize_topic(topic)
   params$method <- 'POST'
 
   do.call(hipchat_send, params)$id
@@ -117,12 +119,26 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #' Delete a Hipchat room.
 #'
 #' @inheritParams hipchat_topic
+#' @param confirm logical. Whether or not to ask for a confirmation message
+#'   before deleting the room. By default, \code{TRUE}. (Deleting rooms
+#'   is dangerous!)
+#' @param \code{TRUE} or \code{FALSE} according as the room was deleted.
 #' @examples
 #' \dontrun{
 #'    hipchat_create_room('Example room')
 #'    hipchat_delete_room('Example room')
 #' }
-hipchat_delete_room <- function(room_name_or_id) {
+hipchat_delete_room <- function(room_name_or_id, confirm = TRUE) {
+  room_id <- sanitize_room(room_name_or_id)
+
+  if (isTRUE(confirm)) {
+    confirm <- sample(c('OK', 'Yes', 'Y', 'Confirm'), 1)
+    answer <- readline(gettextf(paste("Are you *sure* you wish to delete Hipchat room",
+      "%s? If so, write %s: "), sQuote(room_name_or_id), sQuote(confirm)))
+    if (!identical(answer, confirm)) return(FALSE)
+  }
+  hipchat_send('room', room_id, method = 'DELETE')
+  TRUE
 }
   
 
