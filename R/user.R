@@ -17,10 +17,24 @@
 #' @examples
 #' \dontrun{
 #'   hipchat_create_user('My name', 'mypassword', 'my.email@@org.com',
-#'     'my title', '@@MyName')
+#'     'my title', 'MyName')
 #' }
 hipchat_create_user <- function(name, password, email, title, mention_name,
                                 is_group_admin = FALSE, timezone = 'UTC') {
-
+  stopifnot(is.character(name) && length(name) == 1 && nchar(name) >= 1 && nchar(name <= 50))
+  stopifnot(is.character(password) && length(password) == 1)
+  stopifnot(is.character(email) && length(email) == 1)
+  if (!grepl(fixed = TRUE, '@', email)) stop("Emails need an '@'")
+  stopifnot(is.character(timezone) && length(timezone) == 1)
+  stopifnot(identical(is_group_admin, TRUE) || identical(is_group_admin, FALSE))
+  if (!missing(title)) stopifnot(is.character(title) && length(title) == 1)
+  if (!missing(mention_name)) stopifnot(is.character(mention_name) && length(mention_name) == 1)
+  
+  params <- list('user', name = name, password = password, email = email,
+                 is_group_admin = is_group_admin, timezone = timezone, method = 'POST')
+  if (!missing(title)) params$title <- title
+  if (!missing(mention_name)) params$mention_name <- mention_name
+  browser()
+  do.call(hipchat_send, params)
 }
 
