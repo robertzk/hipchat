@@ -37,7 +37,7 @@ for available time zones, see the third column in the table
 \examples{
 \dontrun{
   hipchat_create_user('My name', 'mypassword', 'my.email@org.com',
-    'my title', '@MyName')
+    'my title', 'MyName')
 }
 }
 \references{

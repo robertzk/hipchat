@@ -53,7 +53,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   if (method == 'GET')
     httr::content(method_call(modify_url(url, query = params), encode = 'json'))
   else
-    httr::content(method(url, body = lapply(params, unbox), encode = 'json'))
+    httr::content(method_call(url, body = lapply(params, unbox), encode = 'json'))
 }
 
 #' Hipchat API url.

@@ -61,7 +61,7 @@ refresh_room_cache <- local({
     units(refresh_interval) <- 'secs'
     if (as.integer(refresh_interval) > 5) { # Limit API refreshes to every 5 seconds
       last_refreshed <<- Sys.time()
-      room_cache$set(hipchat_rooms(api_token))
+      room_cache$set(hipchat_rooms(api_token = api_token))
     }
   }
 })
