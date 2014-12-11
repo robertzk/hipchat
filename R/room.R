@@ -51,7 +51,7 @@ hipchat_room_id <- function(room_name) {
   room_in_cache <- function(room_name) is.element(room_name, room_cache$getNames())
   if (any(!room_in_cache(room_name))) refresh_room_cache()
 
-  setNames(room_cache$get(room_name), room_name)
+  setNames(room_cache$get(room_name) %||% NA_character_, room_name)
 }
 
 refresh_room_cache <- local({
