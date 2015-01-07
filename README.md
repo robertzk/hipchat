@@ -1,4 +1,4 @@
-Hipchat R integration [![Build Status](https://travis-ci.org/robertzk/hipchat.svg?branch=master)](https://travis-ci.org/robertzk/hipchat)
+Hipchat R integration [![Build Status](https://travis-ci.org/robertzk/hipchat.svg?branch=master)](https://travis-ci.org/robertzk/hipchat) [![Coverage Status](https://coveralls.io/repos/robertzk/hipchat/badge.png)](https://coveralls.io/r/robertzk/hipchat)
 =======
 
 Features
