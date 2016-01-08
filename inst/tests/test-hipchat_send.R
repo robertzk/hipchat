@@ -21,4 +21,11 @@ test_that('it correctly sends to a room', {
                c('room', 'room', 'notification', 'hey'))
 })
 
-
+test_that('it can handle an error', {
+  with_mock(
+    `httr::GET` = function(a, b, c, message, ...) list(error = "API ERROR LOL"),
+    `httr::POST` = function(a, b, c, message, ...) list(error = "API ERROR LOL"),
+    `hipchat:::determine_target` = function(...) list(type = 'room', target = 'room'),
+    expect_error(hipchat('room', 'hey'))
+  )
+})
