@@ -25,7 +25,6 @@ hipchat_rooms <- function(max_results = 1000, include_archived = FALSE, full = F
 
   rooms <- hipchat_send('room', method = 'GET', `max-results` = max_results,
                         include_archived = include_archived, api_token = api_token)
-  if (!is.null(rooms$error)) { stop(rooms$error) }
   parse <- function(item) if (full) item else setNames(item$id, item$name)
   do.call(c, lapply(rooms$items, parse))
 }
