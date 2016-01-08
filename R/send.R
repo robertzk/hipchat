@@ -50,10 +50,13 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   method_call <- getFunction(method, where = getNamespace('httr'))
   unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
 
-  if (method == 'GET')
+  result <- if (method == 'GET') {
     httr::content(method_call(modify_url(url, query = params), encode = 'json'))
-  else
+  } else {
     httr::content(method_call(url, body = lapply(params, unbox), encode = 'json'))
+  }
+  if (!is.null(result$error)) { stop(result$error) }
+  result
 }
 
 #' Hipchat API url.
