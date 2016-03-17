@@ -30,12 +30,23 @@ test_that("it can handle an error", {
   )
 })
 
+test_that("it can handle an httr error", {
+  with_mock(
+    `httr::GET` = function(...) stop("Should not GET"),
+    `httr::POST` = function(...) {
+      structure(list(url = "blah", status_code = 500L), class = "response")
+    },
+    `hipchat:::determine_target` = function(...) list(type = "room", target = "room"),
+    expect_error(hipchat_send("room", "room", "message"), "status code was 500")
+  )
+})
+
 test_that("it works if it does not return a list", {
   with_mock(
     `httr::content` = function(...) "message",
-    `httr::GET` = function(...) "message",
-    `httr::POST` = function(...) stop("should not POST"),
+    `httr::GET` = function(...) stop("Should not GET"),
+    `httr::POST` = function(...) "message",
     `hipchat:::hipchat_url` = function(...) "whocares.com",
-    expect_equal("message", hipchat_send("room", "My room", "notification"))
+    expect_equal("message", hipchat_send("room", "room", "message"))
   )
 })
