@@ -1,6 +1,6 @@
 Package: hipchat
 Title: An R package for communicating with the hipchat API
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: "Robert Krzyzanowski <robert@robertzk.com> [aut, cre]"
 Description: Communication with the hipchat API, including sending
     messages to rooms, creating and destroying rooms, changing the topic,
@@ -16,3 +16,4 @@ Suggests:
     testthatsomemore,
     knitr
 LazyData: true
+RoxygenNote: 5.0.1.9000

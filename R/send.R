@@ -51,11 +51,16 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
 
   result <- if (method == 'GET') {
-    httr::content(method_call(modify_url(url, query = params), encode = 'json'))
+    method_call(modify_url(url, query = params), encode = 'json')
   } else {
-    httr::content(method_call(url, body = lapply(params, unbox), encode = 'json'))
+    method_call(url, body = lapply(params, unbox), encode = 'json')
   }
-  if (!is.null(result$error)) { stop(result$error) }
+  if (is.success(httr::status_code(result))) {
+    result <- httr::content(result)
+  } else {
+    stop("httr ", method, " not successful: status code was ", httr::status_code(result))
+  }
+  if (is.list(result) && !is.null(result$error)) { stop(result$error) }
   result
 }
 
@@ -107,3 +112,7 @@ determine_method <- function(url) {
 }
 
 
+#' Determine if a status code is a successful status code.
+is.success <- function(code) {
+  code >= 200L && code < 300L
+}
