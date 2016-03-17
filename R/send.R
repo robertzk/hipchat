@@ -55,7 +55,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   } else {
     httr::content(method_call(url, body = lapply(params, unbox), encode = 'json'))
   }
-  if (!is.null(result$error)) { stop(result$error) }
+  if (is.list(result) && !is.null(result$error)) { stop(result$error) }
   result
 }
 
