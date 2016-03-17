@@ -16,3 +16,4 @@ Suggests:
     testthatsomemore,
     knitr
 LazyData: true
+RoxygenNote: 5.0.1.9000
