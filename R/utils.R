@@ -1,7 +1,10 @@
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
+hipchat_use_error_suppression <- function()
+  getOption('hipchat.use_send_error_suppression') %||% TRUE
+
 #' Hipchat API token.
-#' 
+#'
 #' @return the Hipchat API token in the environment variable \code{HIPCHAT_API_TOKEN}
 #'    or the R option \code{getOption('hipchat.api_token')}.
 hipchat_api_token <- function()

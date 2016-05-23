@@ -45,7 +45,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   params <- params[named(params)]
   method <- (if (missing(method)) determine_method(url)) %||% method
   if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
-    stop(gettextf("HTTP method must be one of %s, got %s", 
+    stop(gettextf("HTTP method must be one of %s, got %s",
                   comma(methods, ' or '), sQuote(method)))
   method_call <- getFunction(method, where = getNamespace('httr'))
   unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
@@ -55,12 +55,19 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
   } else {
     method_call(url, body = lapply(params, unbox), encode = 'json')
   }
+
+  if (hipchat_use_error_suppression()) {
+    client_message_function <- warning
+  } else {
+    client_message_function <- stop
+  }
+
   if (is.success(httr::status_code(result))) {
     result <- httr::content(result)
   } else {
-    stop("httr ", method, " not successful: status code was ", httr::status_code(result))
+    client_message_function("httr ", method, " not successful: status code was ", httr::status_code(result))
   }
-  if (is.list(result) && !is.null(result$error)) { stop(result$error) }
+  if (is.list(result) && !is.null(result$error)) { client_message_function(result$error) }
   result
 }
 
@@ -70,7 +77,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
 #' @inheritParams hipchat_send
 #' @return https://api.hipchat.com/v2/...
 #' @examples
-#' stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) == 
+#' stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) ==
 #'   paste(hipchat:::hipchat_api_url, 'oauth', 'token', sep = '/'))
 hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
   args <- list(...)
@@ -83,7 +90,7 @@ hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
 }
 
 #' Determine the correct HTTP method to use for a given API route.
-#' 
+#'
 #' If multiple methods are available (e.g., GET and DELETE), a warning will be issued
 #' and only the first method will be used.
 #' If no methods are available, it is probably an invalid API route.
