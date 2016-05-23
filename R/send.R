@@ -56,7 +56,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
     method_call(url, body = lapply(params, unbox), encode = 'json')
   }
 
-  if (hipchat_use_error_suppression()) {
+  if (hipchat_use_send_error_suppression()) {
     client_message_function <- warning
   } else {
     client_message_function <- stop
