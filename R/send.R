@@ -39,36 +39,43 @@
 #'   # posts to https://api.hipchat.com/v2/room/My room/invite/your@@friend.org
 #' }
 hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method = 'GET') {
-  url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
-  named <- function(x) nzchar(names(x) %||% rep("", length(x)))
-  params <- list(...)
-  params <- params[named(params)]
-  method <- (if (missing(method)) determine_method(url)) %||% method
-  if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
-    stop(gettextf("HTTP method must be one of %s, got %s",
-                  comma(methods, ' or '), sQuote(method)))
-  method_call <- getFunction(method, where = getNamespace('httr'))
-  unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
+  tryCatch(
+    expr = {
+      url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
+      named <- function(x) nzchar(names(x) %||% rep("", length(x)))
+      params <- list(...)
+      params <- params[named(params)]
+      method <- (if (missing(method)) determine_method(url)) %||% method
+      if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
+        stop(gettextf("HTTP method must be one of %s, got %s",
+                      comma(methods, ' or '), sQuote(method)))
+      method_call <- getFunction(method, where = getNamespace('httr'))
+      unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
 
-  result <- if (method == 'GET') {
-    method_call(modify_url(url, query = params), encode = 'json')
-  } else {
-    method_call(url, body = lapply(params, unbox), encode = 'json')
-  }
+      result <- if (method == 'GET') {
+        method_call(modify_url(url, query = params), encode = 'json')
+      } else {
+        method_call(url, body = lapply(params, unbox), encode = 'json')
+      }
 
-  if (hipchat_use_send_error_suppression()) {
-    client_message_function <- warning
-  } else {
-    client_message_function <- stop
-  }
+      if (is.success(httr::status_code(result))) {
+        result <- httr::content(result)
+      } else {
+        stop("httr ", method, " not successful: status code was ", httr::status_code(result))
+      }
+      if (is.list(result) && !is.null(result$error)) { stop(result$error) }
+      result
+    },
 
-  if (is.success(httr::status_code(result))) {
-    result <- httr::content(result)
-  } else {
-    client_message_function("httr ", method, " not successful: status code was ", httr::status_code(result))
-  }
-  if (is.list(result) && !is.null(result$error)) { client_message_function(result$error) }
-  result
+    error = function(e) {
+      if (hipchat_use_send_error_suppression()) {
+        warning(e)
+        message('Hipchat send failed!')
+      } else {
+        stop(e)
+      }
+    }
+  )
 }
 
 #' Hipchat API url.
