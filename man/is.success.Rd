@@ -6,6 +6,9 @@
 \usage{
 is.success(code)
 }
+\arguments{
+\item{type}{numeric. The HTTP status code}
+}
 \description{
 Determine if a status code is a successful status code.
 }

@@ -127,6 +127,8 @@ determine_method <- function(url) {
 
 
 #' Determine if a status code is a successful status code.
+#'
+#' @param type numeric. The HTTP status code
 is.success <- function(code) {
   code >= 200L && code < 300L
 }
