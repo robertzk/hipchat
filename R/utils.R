@@ -3,8 +3,9 @@
 #' Option to handle hipchat_send errors as warnings or errors
 #'
 #' @return logical in the R option \code{getOption('hipchat.use_send_error_suppression')}.
-hipchat_use_send_error_suppression <- function()
-  getOption('hipchat.use_send_error_suppression') %||% TRUE
+hipchat_use_send_error_suppression <- function() {
+  getOption("hipchat.use_send_error_suppression", TRUE)
+}
 
 #' Hipchat API token.
 #'
