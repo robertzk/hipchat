@@ -18,7 +18,7 @@ https://api.hipchat.com/v2/...
 Hipchat API url.
 }
 \examples{
-stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) == 
+stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) ==
   paste(hipchat:::hipchat_api_url, 'oauth', 'token', sep = '/'))
 }
 

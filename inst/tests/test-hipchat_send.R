@@ -46,7 +46,39 @@ test_that("it works if it does not return a list", {
     `httr::status_code` = function(...) 200L,
     `httr::GET` = function(...) "message",
     `httr::POST` = function(...) "message",
-    `hipchat:::hipchat_url` = function(...) "whocares.com",
-    expect_equal("message", hipchat_send("room", "room", "message"))
+    `hipchat:::hipchat_url` = function(...) "whocares.com", {
+      expect_equal("message", hipchat_send("room", "room", "message"))
+    }
   )
 })
+
+test_that("it can replace errors with warnings during error suppression", {
+  withr::with_options(list(hipchat.use_send_error_suppression = TRUE), {
+    with_mock(
+      `httr::content` = function(...) "message",
+      `httr::status_code` = function(...) 401L,
+      `httr::GET` = function(...) "message",
+      `httr::POST` = function(...) "message",
+      `hipchat:::hipchat_url` = function(...) "whocares.com", {
+        expect_warning(hipchat_send("room", "room", "message"))
+      }
+    )
+  })
+})
+
+test_that("it does not replace errors with warnings without error suppression", {
+  withr::with_options(list(hipchat.use_send_error_suppression = FALSE), {
+    with_mock(
+      `httr::content` = function(...) "message",
+      `httr::status_code` = function(...) 401L,
+      `httr::GET` = function(...) "message",
+      `httr::POST` = function(...) "message",
+      `hipchat:::hipchat_url` = function(...) "whocares.com", {
+        expect_error(hipchat_send("room", "room", "message"))
+      }
+    )
+  })
+})
+
+
+

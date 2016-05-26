@@ -39,29 +39,43 @@
 #'   # posts to https://api.hipchat.com/v2/room/My room/invite/your@@friend.org
 #' }
 hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method = 'GET') {
-  url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
-  named <- function(x) nzchar(names(x) %||% rep("", length(x)))
-  params <- list(...)
-  params <- params[named(params)]
-  method <- (if (missing(method)) determine_method(url)) %||% method
-  if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
-    stop(gettextf("HTTP method must be one of %s, got %s", 
-                  comma(methods, ' or '), sQuote(method)))
-  method_call <- getFunction(method, where = getNamespace('httr'))
-  unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
+  tryCatch(
+    expr = {
+      url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
+      named <- function(x) nzchar(names(x) %||% rep("", length(x)))
+      params <- list(...)
+      params <- params[named(params)]
+      method <- (if (missing(method)) determine_method(url)) %||% method
+      if (!is.element(method, methods <- c('GET', 'POST', 'PUT', 'DELETE')))
+        stop(gettextf("HTTP method must be one of %s, got %s",
+                      comma(methods, ' or '), sQuote(method)))
+      method_call <- getFunction(method, where = getNamespace('httr'))
+      unbox <- function(x) if (is.atomic(x) && length(x) == 1) jsonlite::unbox(x) else x
 
-  result <- if (method == 'GET') {
-    method_call(modify_url(url, query = params), encode = 'json')
-  } else {
-    method_call(url, body = lapply(params, unbox), encode = 'json')
-  }
-  if (is.success(httr::status_code(result))) {
-    result <- httr::content(result)
-  } else {
-    stop("httr ", method, " not successful: status code was ", httr::status_code(result))
-  }
-  if (is.list(result) && !is.null(result$error)) { stop(result$error) }
-  result
+      result <- if (method == 'GET') {
+        method_call(modify_url(url, query = params), encode = 'json')
+      } else {
+        method_call(url, body = lapply(params, unbox), encode = 'json')
+      }
+
+      if (is.success(httr::status_code(result))) {
+        result <- httr::content(result)
+      } else {
+        stop("httr ", method, " not successful: status code was ", httr::status_code(result))
+      }
+      if (is.list(result) && !is.null(result$error)) { stop(result$error) }
+      result
+    },
+
+    error = function(e) {
+      if (hipchat_use_send_error_suppression()) {
+        warning(as.character(e))
+        message('Hipchat send failed!')
+      } else {
+        stop(e)
+      }
+    }
+  )
 }
 
 #' Hipchat API url.
@@ -70,7 +84,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
 #' @inheritParams hipchat_send
 #' @return https://api.hipchat.com/v2/...
 #' @examples
-#' stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) == 
+#' stopifnot(hipchat:::hipchat_url('oauth', 'token', api_token = NULL) ==
 #'   paste(hipchat:::hipchat_api_url, 'oauth', 'token', sep = '/'))
 hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
   args <- list(...)
@@ -83,7 +97,7 @@ hipchat_url <- function(..., api_token = hipchat:::hipchat_api_token()) {
 }
 
 #' Determine the correct HTTP method to use for a given API route.
-#' 
+#'
 #' If multiple methods are available (e.g., GET and DELETE), a warning will be issued
 #' and only the first method will be used.
 #' If no methods are available, it is probably an invalid API route.
@@ -113,6 +127,8 @@ determine_method <- function(url) {
 
 
 #' Determine if a status code is a successful status code.
+#'
+#' @param code numeric. The HTTP status code
 is.success <- function(code) {
   code >= 200L && code < 300L
 }
