@@ -46,8 +46,9 @@ test_that("it works if it does not return a list", {
     `httr::status_code` = function(...) 200L,
     `httr::GET` = function(...) "message",
     `httr::POST` = function(...) "message",
-    `hipchat:::hipchat_url` = function(...) "whocares.com",
-    expect_equal("message", hipchat_send("room", "room", "message"))
+    `hipchat:::hipchat_url` = function(...) "whocares.com", {
+      expect_equal("message", hipchat_send("room", "room", "message"))
+    }
   )
 })
 
@@ -59,11 +60,11 @@ test_that("it can replace errors with warnings during error suppression", {
       `httr::GET` = function(...) "message",
       `httr::POST` = function(...) "message",
       `hipchat:::hipchat_url` = function(...) "whocares.com", {
-        expect_warning(
-          hipchat_send("room", "room", "message")
-        )
+        expect_warning(hipchat_send("room", "room", "message"))
       }
     )
   })
 })
+
+
 

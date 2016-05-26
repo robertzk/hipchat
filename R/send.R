@@ -69,7 +69,7 @@ hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method
 
     error = function(e) {
       if (hipchat_use_send_error_suppression()) {
-        warning(e)
+        warning(as.character(e))
         message('Hipchat send failed!')
       } else {
         stop(e)
