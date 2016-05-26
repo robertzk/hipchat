@@ -59,7 +59,6 @@ test_that("it can replace errors with warnings during error suppression", {
       `httr::GET` = function(...) "message",
       `httr::POST` = function(...) "message",
       `hipchat:::hipchat_url` = function(...) "whocares.com", {
-        browser()
         expect_warning(
           hipchat_send("room", "room", "message")
         )
