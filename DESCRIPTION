@@ -12,8 +12,9 @@ Imports:
     httr,
     jsonlite
 Suggests:
+    knitr,
     testthat,
     testthatsomemore,
-    knitr
+    withr
 LazyData: true
 RoxygenNote: 5.0.1
