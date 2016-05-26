@@ -66,5 +66,19 @@ test_that("it can replace errors with warnings during error suppression", {
   })
 })
 
+test_that("it does not replace errors with warnings without error suppression", {
+  withr::with_options(list(hipchat.use_send_error_suppression = FALSE), {
+    with_mock(
+      `httr::content` = function(...) "message",
+      `httr::status_code` = function(...) 401L,
+      `httr::GET` = function(...) "message",
+      `httr::POST` = function(...) "message",
+      `hipchat:::hipchat_url` = function(...) "whocares.com", {
+        expect_error(hipchat_send("room", "room", "message"))
+      }
+    )
+  })
+})
+
 
 
