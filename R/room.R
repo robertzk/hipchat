@@ -13,6 +13,7 @@
 #' @param full logical. Whether or not to return raw output from the Hipchat
 #'   API. If \code{FALSE} (the default), only a named character vector of
 #'   room IDs will be returned.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @export
 #' @references https://www.hipchat.com/docs/apiv2/method/get_all_rooms
 #' @return an integer vector, with names being room names and values being room IDs
@@ -38,6 +39,7 @@ hipchat_rooms <- function(max_results = 1000, include_archived = FALSE, full = F
 #'
 #' @param room_name character. A character vector giving the room
 #'   name. This is vectorized if you would like IDs for multiple rooms.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return A named integer vector, with the names being the room names
 #'   and the values being the room IDs. If a room ID is not found, the
 #'   value returned will be NA, so that if you pass in one room name
@@ -45,11 +47,11 @@ hipchat_rooms <- function(max_results = 1000, include_archived = FALSE, full = F
 #' @note This will call the hipchat API at \code{https://api.hipchat.com/v2/room}
 #'   to fetch the room-id map.
 #' @export
-hipchat_room_id <- function(room_name) {
+hipchat_room_id <- function(room_name, api_token = hipchat_api_token()) {
   stopifnot(is.character(room_name))
 
   room_in_cache <- function(room_name) is.element(room_name, room_cache$getNames())
-  if (any(!room_in_cache(room_name))) refresh_room_cache()
+  if (any(!room_in_cache(room_name))) refresh_room_cache(api_token)
 
   setNames(room_cache$get(room_name) %||% NA_character_, room_name)
 }

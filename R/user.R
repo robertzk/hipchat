@@ -34,7 +34,6 @@ hipchat_create_user <- function(name, password, email, title, mention_name,
                  is_group_admin = is_group_admin, timezone = timezone, method = 'POST')
   if (!missing(title)) params$title <- title
   if (!missing(mention_name)) params$mention_name <- mention_name
-  browser()
   do.call(hipchat_send, params)
 }
 
