@@ -73,7 +73,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   }
 
   # We are sending a message to one room/user that is under 10,000 characters.
-  target <- determine_target(room_or_user)
+  target <- determine_target(room_or_user, api_token = api_token)
   if (target$type == 'user')
     hipchat_send('user', target$target, 'message', message = message,
                  notify = notify, message_format = message_format, api_token = api_token)
@@ -96,6 +96,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 #'   room IDs are preferred to room names). The \code{type} key will
 #'   contain one of \code{c("room", "user")} according as \code{room_or_user}
 #'   is determined to be a room or user.
+#' @inheritParams hipchat
 #' @examples
 #' stopifnot(hipchat:::determine_target('some@@guy.com')$type == 'user')
 #'
@@ -103,7 +104,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 #'   stopifnot(is.numeric(hipchat:::determine_target('Some room')$target))
 #'   # Will be a room ID, assuming "Some room" exists.
 #' }
-determine_target <- function(room_or_user) {
+determine_target <- function(room_or_user, api_token = hipchat_api_token()) {
   stopifnot(is.character(room_or_user) || is.numeric(room_or_user)) 
   stopifnot(length(room_or_user) == 1)
 
@@ -116,7 +117,7 @@ determine_target <- function(room_or_user) {
     room_or_user <- if (grepl('^[0-9]+$', room_or_user))
       as.integer(room_or_user)
     else {
-      out <- unname(hipchat_room_id(room_or_user))
+      out <- unname(hipchat_room_id(room_or_user, api_token))
       if (is.na(room_or_user)) stop("Hipchat room %s not found", sQuote(room_or_user))
       out
     }

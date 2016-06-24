@@ -4,11 +4,13 @@
 \alias{hipchat_room_id}
 \title{Convert a Hipchat room name to an ID.}
 \usage{
-hipchat_room_id(room_name)
+hipchat_room_id(room_name, api_token = hipchat_api_token())
 }
 \arguments{
 \item{room_name}{character. A character vector giving the room
 name. This is vectorized if you would like IDs for multiple rooms.}
+
+\item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
 }
 \value{
 A named integer vector, with the names being the room names

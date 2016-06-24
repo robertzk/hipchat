@@ -11,7 +11,7 @@ match_method(url)
 }
 \value{
 character vector of applicable methods, from
-   \code{c("GET", "POST", "PUT", "DELETE"}.
+   \code{c("GET", "POST", "PUT", "DELETE")}.
 }
 \description{
 Find appropriate HTTP method for a given Hipchat URL.

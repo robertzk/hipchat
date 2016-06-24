@@ -38,7 +38,7 @@ comma <- function(x, sep = " and ") {
   else paste(paste(head(x, -1), collapse = ", "), utils::tail(x, 1), sep = sep)
 }
 
-sanitize_room <- function(room_name_or_id, convert_to_id = TRUE) {
+sanitize_room <- function(room_name_or_id, convert_to_id = TRUE, api_token = hipchat_api_token()) {
   if (!is.numeric(room_name_or_id) && !is.character(room_name_or_id))
     stop("Please provide a room name or ID to set a room; got something ",
          "of class ", class(room_name_or_id)[1])
@@ -46,7 +46,7 @@ sanitize_room <- function(room_name_or_id, convert_to_id = TRUE) {
 
   if (!isTRUE(convert_to_id)) return(room_name_or_id)
   if (is.character(room_name_or_id)) room_name_or_id <- local({
-    out <- hipchat_room_id(room_name_or_id)
+    out <- hipchat_room_id(room_name_or_id, api_token)
     if (is.na(out)) stop("No Hipchat room ", sQuote(room_name_or_id), " found.")
     out
   }) else room_name_or_id

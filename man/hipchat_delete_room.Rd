@@ -4,7 +4,7 @@
 \alias{hipchat_delete_room}
 \title{Delete a Hipchat room.}
 \usage{
-hipchat_delete_room(room_name_or_id, confirm = TRUE)
+hipchat_delete_room(room_name_or_id, confirm = TRUE, api_token = api_token)
 }
 \arguments{
 \item{room_name_or_id}{character or integer.}
@@ -12,6 +12,8 @@ hipchat_delete_room(room_name_or_id, confirm = TRUE)
 \item{confirm}{logical. Whether or not to ask for a confirmation message
 before deleting the room. By default, \code{TRUE}. (Deleting rooms
 is dangerous!)}
+
+\item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
 }
 \value{
 \code{TRUE} or \code{FALSE} according as the room was deleted.

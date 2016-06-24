@@ -14,6 +14,7 @@
 #' @param full logical. Whether or not to display full history. By default, \code{FALSE},
 #'   which will return a \code{data.frame} with columns \code{c('id', 'from', 'message', 'date')}.
 #'   If \code{full = TRUE}, the raw output from the Hipchat API is provided as a list.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return If \code{full = FALSE} (the default), a \code{data.frame}
 #'   with columns \code{c('id', 'from', 'message', 'time', 'color')}. Otherwise, a full list
 #'   of the JSON response from the Hipchat API. (see References section)
@@ -29,8 +30,8 @@
 #'   # Full Hipchat API output for the latest 75 messages.
 #' }
 hipchat_history <- function(room_name_or_id, date = 'recent', timezone = 'UTC', start_index = 0,
-                            max_results = 100, reverse = TRUE, full = FALSE) {
-  room_id <- sanitize_room(room_name_or_id)
+                            max_results = 100, reverse = TRUE, full = FALSE, api_token = hipchat_api_token()) {
+  room_id <- sanitize_room(room_name_or_id, api_token = api_token)
   date <- sanitize_date(date)
   stopifnot(is.character(timezone) && length(timezone) == 1)
   stopifnot(is.numeric(start_index) &&  length(start_index) == 1 && start_index >= 0)

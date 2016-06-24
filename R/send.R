@@ -41,7 +41,7 @@
 hipchat_send <- function(type, var, ..., api_token = hipchat_api_token(), method = 'GET') {
   tryCatch(
     expr = {
-      url <- if (missing(var)) hipchat_url(type, ...) else hipchat_url(type, var, ...)
+      url <- if (missing(var)) hipchat_url(type, api_token = api_token, ...) else hipchat_url(type, api_token = api_token, var, ...)
       named <- function(x) nzchar(names(x) %||% rep("", length(x)))
       params <- list(...)
       params <- params[named(params)]

@@ -13,6 +13,7 @@
 #' @param full logical. Whether or not to return raw output from the Hipchat
 #'   API. If \code{FALSE} (the default), only a named character vector of
 #'   room IDs will be returned.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @export
 #' @references https://www.hipchat.com/docs/apiv2/method/get_all_rooms
 #' @return an integer vector, with names being room names and values being room IDs
@@ -38,6 +39,7 @@ hipchat_rooms <- function(max_results = 1000, include_archived = FALSE, full = F
 #'
 #' @param room_name character. A character vector giving the room
 #'   name. This is vectorized if you would like IDs for multiple rooms.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return A named integer vector, with the names being the room names
 #'   and the values being the room IDs. If a room ID is not found, the
 #'   value returned will be NA, so that if you pass in one room name
@@ -45,11 +47,11 @@ hipchat_rooms <- function(max_results = 1000, include_archived = FALSE, full = F
 #' @note This will call the hipchat API at \code{https://api.hipchat.com/v2/room}
 #'   to fetch the room-id map.
 #' @export
-hipchat_room_id <- function(room_name) {
+hipchat_room_id <- function(room_name, api_token = hipchat_api_token()) {
   stopifnot(is.character(room_name))
 
   room_in_cache <- function(room_name) is.element(room_name, room_cache$getNames())
-  if (any(!room_in_cache(room_name))) refresh_room_cache()
+  if (any(!room_in_cache(room_name))) refresh_room_cache(api_token)
 
   setNames(room_cache$get(room_name) %||% NA_character_, room_name)
 }
@@ -85,13 +87,14 @@ room_cache <- local({
 #'
 #' @param room_name_or_id character or integer.
 #' @param topic character. Must be under 250 characters.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @export
 #' @examples
 #' \dontrun{
 #'   hipchat_topic('Some room', 'This is the new topic')
 #' }
-hipchat_topic <- function(room_name_or_id, topic) {
-  room_name_or_id <- sanitize_room(room_name_or_id)
+hipchat_topic <- function(room_name_or_id, topic, api_token = hipchat_api_token()) {
+  room_name_or_id <- sanitize_room(room_name_or_id, api_token = api_token)
   topic <- sanitize_topic(topic)
 
   hipchat_send('room', room_name_or_id, 'topic', topic = topic)
@@ -107,6 +110,7 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #'   (beginning with an @@) of the room's owner. Defaults to the current user. (Optional)
 #' @param privacy character. Whether the room is available for access by other users or not.
 #'   Must be either \code{'public'} or \code{'private'} (default is \code{'public'}).
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return the id of the newly created room.
 #' @export
 #' @examples
@@ -114,8 +118,8 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #'   hipchat_create_room('A new private room', 'With a new topic', privacy = 'private')
 #' }
 hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
-  owner_user, privacy = 'public') {
-  room_name <- sanitize_room(room_name, convert_to_id = FALSE)
+  owner_user, privacy = 'public', api_token = hipchat_api_token()) {
+  room_name <- sanitize_room(room_name, convert_to_id = FALSE, api_token = api_token)
   stopifnot(is.character(room_name))
   if (nchar(room_name) > 100)
     stop("Hipchat rooms can be at most 100 characters, you provided ", nchar(room_name))
@@ -138,6 +142,7 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #' @param confirm logical. Whether or not to ask for a confirmation message
 #'   before deleting the room. By default, \code{TRUE}. (Deleting rooms
 #'   is dangerous!)
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return \code{TRUE} or \code{FALSE} according as the room was deleted.
 #' @examples
 #' \dontrun{
@@ -145,8 +150,8 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #'    hipchat_delete_room('Example room') # Will ask a confirmation message.
 #'    hipchat_delete_room('Example room', confirm = FALSE) # Dangerous! No confirmation.
 #' }
-hipchat_delete_room <- function(room_name_or_id, confirm = TRUE) {
-  room_id <- sanitize_room(room_name_or_id)
+hipchat_delete_room <- function(room_name_or_id, confirm = TRUE, api_token = api_token) {
+  room_id <- sanitize_room(room_name_or_id, api_token = api_token)
 
   if (isTRUE(confirm)) {
     confirm <- sample(c('OK', 'Yes', 'Y', 'Confirm'), 1)
