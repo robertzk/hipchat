@@ -5,7 +5,7 @@
 \title{Create a new Hipchat room. (Must have privileges)}
 \usage{
 hipchat_create_room(room_name, topic = NULL, guest_access = FALSE,
-  owner_user, privacy = "public")
+  owner_user, privacy = "public", api_token = hipchat_api_token())
 }
 \arguments{
 \item{room_name}{character. Room name. Maximum 100 characters.}
@@ -20,6 +20,8 @@ By default, \code{FALSE}.}
 
 \item{privacy}{character. Whether the room is available for access by other users or not.
 Must be either \code{'public'} or \code{'private'} (default is \code{'public'}).}
+
+\item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
 }
 \value{
 the id of the newly created room.

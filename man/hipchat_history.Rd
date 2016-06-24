@@ -5,7 +5,8 @@
 \title{Show the history for a given Hipchat room.}
 \usage{
 hipchat_history(room_name_or_id, date = "recent", timezone = "UTC",
-  start_index = 0, max_results = 100, reverse = TRUE, full = FALSE)
+  start_index = 0, max_results = 100, reverse = TRUE, full = FALSE,
+  api_token = hipchat_api_token())
 }
 \arguments{
 \item{room_name_or_id}{character or integer.}
@@ -28,6 +29,8 @@ The default is \code{TRUE}, but set this to \code{FALSE} for consistent paging.}
 \item{full}{logical. Whether or not to display full history. By default, \code{FALSE},
 which will return a \code{data.frame} with columns \code{c('id', 'from', 'message', 'date')}.
 If \code{full = TRUE}, the raw output from the Hipchat API is provided as a list.}
+
+\item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
 }
 \value{
 If \code{full = FALSE} (the default), a \code{data.frame}

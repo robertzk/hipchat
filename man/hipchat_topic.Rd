@@ -4,12 +4,14 @@
 \alias{hipchat_topic}
 \title{Change the topic of a room.}
 \usage{
-hipchat_topic(room_name_or_id, topic)
+hipchat_topic(room_name_or_id, topic, api_token = hipchat_api_token())
 }
 \arguments{
 \item{room_name_or_id}{character or integer.}
 
 \item{topic}{character. Must be under 250 characters.}
+
+\item{api_token}{character. By default, \code{\link{hipchat_api_token}()}.}
 }
 \description{
 Change the topic of a room.

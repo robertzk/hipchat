@@ -4,7 +4,7 @@
 \alias{determine_target}
 \title{Determine whether we are sending to a room or user.}
 \usage{
-determine_target(room_or_user)
+determine_target(room_or_user, api_token = hipchat_api_token())
 }
 \arguments{
 \item{room_or_user}{character or integer}
