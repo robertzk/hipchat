@@ -96,6 +96,7 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
 #'   room IDs are preferred to room names). The \code{type} key will
 #'   contain one of \code{c("room", "user")} according as \code{room_or_user}
 #'   is determined to be a room or user.
+#' @inheritParams hipchat
 #' @examples
 #' stopifnot(hipchat:::determine_target('some@@guy.com')$type == 'user')
 #'

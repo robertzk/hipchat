@@ -8,6 +8,11 @@ determine_target(room_or_user, api_token = hipchat_api_token())
 }
 \arguments{
 \item{room_or_user}{character or integer}
+
+\item{api_token}{character. Optional API token. The default is 
+\code{hipchat:::hipchat_api_token()}, which uses
+ the environment variable \code{HIPCHAT_API_TOKEN} or the 
+ R option \code{getOption('hipchat.api_token')} if they are present.}
 }
 \value{
 a list with two keys, \code{target} and \code{type}.
