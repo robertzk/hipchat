@@ -87,13 +87,14 @@ room_cache <- local({
 #'
 #' @param room_name_or_id character or integer.
 #' @param topic character. Must be under 250 characters.
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @export
 #' @examples
 #' \dontrun{
 #'   hipchat_topic('Some room', 'This is the new topic')
 #' }
-hipchat_topic <- function(room_name_or_id, topic) {
-  room_name_or_id <- sanitize_room(room_name_or_id)
+hipchat_topic <- function(room_name_or_id, topic, api_token = hipchat_api_token()) {
+  room_name_or_id <- sanitize_room(room_name_or_id, api_token = api_token)
   topic <- sanitize_topic(topic)
 
   hipchat_send('room', room_name_or_id, 'topic', topic = topic)
@@ -109,6 +110,7 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #'   (beginning with an @@) of the room's owner. Defaults to the current user. (Optional)
 #' @param privacy character. Whether the room is available for access by other users or not.
 #'   Must be either \code{'public'} or \code{'private'} (default is \code{'public'}).
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return the id of the newly created room.
 #' @export
 #' @examples
@@ -116,8 +118,8 @@ hipchat_topic <- function(room_name_or_id, topic) {
 #'   hipchat_create_room('A new private room', 'With a new topic', privacy = 'private')
 #' }
 hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
-  owner_user, privacy = 'public') {
-  room_name <- sanitize_room(room_name, convert_to_id = FALSE)
+  owner_user, privacy = 'public', api_token = hipchat_api_token()) {
+  room_name <- sanitize_room(room_name, convert_to_id = FALSE, api_token = api_token)
   stopifnot(is.character(room_name))
   if (nchar(room_name) > 100)
     stop("Hipchat rooms can be at most 100 characters, you provided ", nchar(room_name))
@@ -140,6 +142,7 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #' @param confirm logical. Whether or not to ask for a confirmation message
 #'   before deleting the room. By default, \code{TRUE}. (Deleting rooms
 #'   is dangerous!)
+#' @param api_token character. By default, \code{\link{hipchat_api_token}()}.
 #' @return \code{TRUE} or \code{FALSE} according as the room was deleted.
 #' @examples
 #' \dontrun{
@@ -147,8 +150,8 @@ hipchat_create_room <- function(room_name, topic = NULL, guest_access = FALSE,
 #'    hipchat_delete_room('Example room') # Will ask a confirmation message.
 #'    hipchat_delete_room('Example room', confirm = FALSE) # Dangerous! No confirmation.
 #' }
-hipchat_delete_room <- function(room_name_or_id, confirm = TRUE) {
-  room_id <- sanitize_room(room_name_or_id)
+hipchat_delete_room <- function(room_name_or_id, confirm = TRUE, api_token = api_token) {
+  room_id <- sanitize_room(room_name_or_id, api_token = api_token)
 
   if (isTRUE(confirm)) {
     confirm <- sample(c('OK', 'Yes', 'Y', 'Confirm'), 1)
