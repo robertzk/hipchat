@@ -1,7 +1,8 @@
-#### 0.1.6
+#### 0.1.6-7
 
  * Fix a bug wherein the [`api_token` parameter is not respected](https://github.com/robertzk/hipchat/pull/15)
    during calls to `hipchat()`. (#15 @MarcinKosinski)
+ * Fix a bug when calling `hipchat::hipchat` with multiple rooms or users.
 
 #### 0.1.4
 
