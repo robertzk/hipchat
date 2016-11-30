@@ -45,9 +45,10 @@ hipchat <- function(room_or_user, message, notify = TRUE, color = 'yellow',
   stopifnot(is.logical(notify) && length(notify) == 1)
   stopifnot(identical(message_format, 'text') || identical(message_format, 'html'))
 
-  rerun <- function(room_or_user, message)
-    hipchat(room_or_user, message = message, notify = notify, color = color,
-            message_format = message_format, api_token = api_token)
+  rerun <- function(room_or_user, message) {
+    !is.null(hipchat(room_or_user, message = message, notify = notify, color = color,
+                     message_format = message_format, api_token = api_token))
+  }
 
   if (length(room_or_user) > 1) return(all(sapply(room_or_user, rerun, message = message)))
   if (length(message) > 1) return(all(sapply(message, rerun, room_or_user = room_or_user)))
